@@ -138,7 +138,12 @@ button,input,select{font:inherit;color:inherit}
 .theme[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
 .theme[aria-pressed="true"] svg{color:var(--accent)}
 
-.opts{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:10px}
+.opts{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.tune{background:var(--surface);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.tune-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.tune-head b{font-size:15px}
+.tune .row{flex-wrap:nowrap}
+.tune .row .note{white-space:nowrap;font-size:12px}
 .opts select{border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:9px 10px;width:100%}
 .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 input[type=range]{accent-color:var(--accent);flex:1;min-width:140px}
@@ -184,6 +189,7 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
 }
 @media (max-width: 560px){
   .themes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .theme small{display:none}
   .spec{grid-template-columns:repeat(2,minmax(0,1fr))}
   .variants{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dl{grid-template-columns:1fr}
@@ -191,7 +197,11 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
   .wood-detail,.opts{grid-template-columns:1fr}
   .top nav{display:none}
 }
-.themes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.themes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.theme svg{height:46px}
+.shape-info{background:var(--bg);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.shape-info b{font-size:16px}
+.shape-info .meta{font-size:12.5px;color:var(--muted)}
 .theme{position:relative}
 .theme-unused{content:"";position:absolute;left:50%;bottom:-11px;width:16px;height:16px;background:var(--accent-soft);border-right:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:translateX(-50%) rotate(45deg)}
 .submenu{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
@@ -302,8 +312,14 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
         <p class="hint">테마를 누르면 아래에 그 테마의 도마 모양 시안이 펼쳐져요. 마음에 드는 모양을 고르세요. 숫자는 지금 원판 크기에서의 원판 사용률이에요.</p>
         <div class="themes" id="themeGrid" role="tablist" aria-label="테마"></div>
         <div class="submenu" id="submenu" role="tabpanel">
-          <div class="submenu-head"><b id="shapeLabel"></b><span class="note">사용률 높은 순</span></div>
+          <div class="submenu-head"><b id="shapeLabel"></b><span class="note">원판 사용률 높은 순 · 재단 난이도</span></div>
           <div class="shape-grid" id="shapeGrid"></div>
+          <div class="tune">
+            <div class="tune-head"><b>모양 다듬기</b><div class="row"><button class="btn small" id="btnNew2" type="button">모양 살짝 바꾸기</button><button class="btn small" id="btnReset" type="button">처음대로</button></div></div>
+            <div class="field"><label for="inFat">통통함 <span class="mono" id="fatVal"></span></label><div class="row"><span class="note">날씬하게</span><input id="inFat" type="range" min="-50" max="50" step="5"><span class="note">통통하게</span></div></div>
+            <div class="field"><label for="inVary">변형 정도 <span class="mono" id="varyVal"></span></label><div class="row"><span class="note">반듯하게</span><input id="inVary" type="range" min="0" max="100" step="5"><span class="note">자유롭게</span></div></div>
+            <div class="field"><label for="inRound">모서리 둥글기 <span class="mono" id="roundVal"></span></label><div class="row"><span class="note">각지게</span><input id="inRound" type="range" min="0" max="100" step="5"><span class="note">둥글게</span></div></div>
+          </div>
         </div>
       </section>
 
@@ -312,6 +328,7 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
         <label class="check"><input type="checkbox" id="inHole"> 걸이 구멍 뚫기</label>
         <div class="opts">
           <div class="field"><label for="inText">새길 문구 · 이름</label><div class="inp"><input id="inText" type="text" maxlength="20" placeholder="예: 우리집 부엌, Kim's Kitchen" style="font-family:var(--f-body)"></div></div>
+          <div class="field"><label for="inTpos">문구 위치</label><select id="inTpos"><option value="center">가운데</option><option value="top">위</option><option value="bottom">아래</option><option value="left">왼쪽</option><option value="right">오른쪽</option></select></div>
           <div class="field"><label for="inFont">글씨체</label><select id="inFont"><option value="serif">명조 (단정한)</option><option value="sans">고딕 (깔끔한)</option><option value="hand">손글씨 (귀여운)</option></select></div>
         </div>
       </section>
@@ -443,17 +460,29 @@ function L(x1,y1,x2,y2,a){return "<line x1=\""+n(x1)+"\" y1=\""+n(y1)+"\" x2=\""
 function rrect(x,y,w,h,r){r=Math.min(r,w/2,h/2);var a='A'+n(r)+' '+n(r)+' 0 0 1 ';return 'M'+n(x+r)+' '+n(y)+'H'+n(x+w-r)+a+n(x+w)+' '+n(y+r)+'V'+n(y+h-r)+a+n(x+w-r)+' '+n(y+h)+'H'+n(x+r)+a+n(x)+' '+n(y+h-r)+'V'+n(y+r)+a+n(x+r)+' '+n(y)+'Z';}
 function ellipseD(cx,cy,rx,ry){return 'M'+n(cx-rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx+rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx-rx)+' '+n(cy)+'Z';}
 function circleD(cx,cy,r){return ellipseD(cx,cy,r,r);}
-function roundedPoly(P,r){var N=P.length,d='';for(var i=0;i<N;i++){var p0=P[(i-1+N)%N],p1=P[i],p2=P[(i+1)%N];
+function rf(){return .25+2.5*CUR_ROUND;}
+function roundedPoly(P,r){r*=rf();var N=P.length,d='';for(var i=0;i<N;i++){var p0=P[(i-1+N)%N],p1=P[i],p2=P[(i+1)%N];
   var v1=[p0[0]-p1[0],p0[1]-p1[1]],v2=[p2[0]-p1[0],p2[1]-p1[1]],l1=Math.hypot(v1[0],v1[1]),l2=Math.hypot(v2[0],v2[1]),rr=Math.min(r,l1/2,l2/2);
   var a=[p1[0]+v1[0]/l1*rr,p1[1]+v1[1]/l1*rr],b=[p1[0]+v2[0]/l2*rr,p1[1]+v2[1]/l2*rr];
   d+=(i?'L':'M')+n(a[0])+' '+n(a[1])+'Q'+n(p1[0])+' '+n(p1[1])+' '+n(b[0])+' '+n(b[1]);}return d+'Z';}
 /* 점들을 부드럽게 잇는 닫힌 곡선. 세 번째 값이 1인 점은 뾰족한 꼭짓점 */
-function curveD(P){var N=P.length,t=1/6,d='M'+n(P[0][0])+' '+n(P[0][1]);
+var CUR_ROUND=.3;
+function curveD(P){var N=P.length,t=1/6,kc=CUR_ROUND*.75,d='M'+n(P[0][0])+' '+n(P[0][1]);
   for(var i=0;i<N;i++){var p0=P[(i-1+N)%N],p1=P[i],p2=P[(i+1)%N],p3=P[(i+2)%N];
-    var c1=p1[2]?p1:[p1[0]+(p2[0]-p0[0])*t,p1[1]+(p2[1]-p0[1])*t],c2=p2[2]?p2:[p2[0]-(p3[0]-p1[0])*t,p2[1]-(p3[1]-p1[1])*t];
+    var t1=p1[2]?t*kc:t,t2=p2[2]?t*kc:t,c1=[p1[0]+(p2[0]-p0[0])*t1,p1[1]+(p2[1]-p0[1])*t1],c2=[p2[0]-(p3[0]-p1[0])*t2,p2[1]-(p3[1]-p1[1])*t2];
     d+='C'+n(c1[0])+' '+n(c1[1])+' '+n(c2[0])+' '+n(c2[1])+' '+n(p2[0])+' '+n(p2[1]);}
   return d+'Z';}
 function holeR(W,H){return clamp(Math.min(W,H)*.045,6,12);}
+function paddleGen(W,H,f,Lf,Lmax,hf){
+  var X=function(v){return n(f?W-v:v);},sw=f?0:1,L=clamp(W*Lf,45,Lmax),bw=W-L,hh=Math.min(H*hf,72),hy=(H-hh)/2,rr=Math.min(18,H*.1),q=Math.min(10,hy-rr-1),A=function(rad){return 'A'+n(rad)+' '+n(rad)+' 0 0 '+sw+' ';};
+  var d='M'+X(rr)+' 0H'+X(bw-rr)+A(rr)+X(bw)+' '+n(rr)+'V'+n(hy-q)+'Q'+X(bw)+' '+n(hy)+' '+X(bw+q)+' '+n(hy)+'H'+X(W-hh/2)+A(hh/2)+X(W-hh/2)+' '+n(hy+hh)+'H'+X(bw+q)+'Q'+X(bw)+' '+n(hy+hh)+' '+X(bw)+' '+n(hy+hh+q)+'V'+n(H-rr)+A(rr)+X(bw-rr)+' '+n(H)+'H'+X(rr)+A(rr)+'0 '+n(H-rr)+'V'+n(rr)+A(rr)+X(rr)+' 0Z';
+  var sx=f?[L+bw*.1,L+bw*.9]:[bw*.1,bw*.9];
+  return {d:d,holes:[[f?hh/2:W-hh/2,H/2,Math.min(holeR(W,H),hh*.22)]],safe:[sx[0],H*.15,sx[1],H*.85]};
+}
+/* 극좌표 모양(꽃, 해님): 0~1 상자로 맞춘 점 목록 */
+function polarPts(f,N){var p=[];for(var i=0;i<N;i++){var t=i/N*Math.PI*2-Math.PI/2,rr=f(t);p.push([Math.cos(t)*rr,Math.sin(t)*rr]);}
+  var xs=p.map(function(q){return q[0];}),ys=p.map(function(q){return q[1];}),mx=Math.min.apply(0,xs),Mx=Math.max.apply(0,xs),my=Math.min.apply(0,ys),My=Math.max.apply(0,ys);
+  return p.map(function(q){return [(q[0]-mx)/(Mx-mx),(q[1]-my)/(My-my)];});}
 
 var SHAPES={
  /* ---- 동물 ---- */
@@ -482,7 +511,9 @@ var SHAPES={
  chef:{th:'people',name:'셰프 모자',a:1,hole:[.5,.2],safe:[.2,.36,.8,.68],pts:[
   [.18,1,1],[.18,.74],[.05,.56],[0,.36],[.1,.19],[.26,.2,1],[.35,.04],[.5,0],[.65,.04],[.74,.2,1],[.9,.19],[1,.36],[.95,.56],[.82,.74],[.82,1,1]]},
  /* ---- 트렌드 ---- */
- paddle:{th:'trend',name:'패들 손잡이',a:1.8,gen:function(W,H,r,f){
+ paddle:{th:'trend',name:'패들 손잡이',a:1.8,gen:function(W,H,r,f){return paddleGen(W,H,f,.25,130,.32);}},
+ bread:{th:'trend',name:'바게트 빵 보드',a:3,gen:function(W,H,r,f){return paddleGen(W,H,f,.17,90,.42);}},
+ paddleX:{th:'_',gen:function(W,H,r,f){
    var X=function(v){return n(f?W-v:v);},sw=f?0:1,L=clamp(W*.25,50,130),bw=W-L,hh=Math.min(H*.32,72),hy=(H-hh)/2,rr=Math.min(18,H*.1),q=Math.min(10,hy-rr-1),A=function(rad){return 'A'+n(rad)+' '+n(rad)+' 0 0 '+sw+' ';};
    var d='M'+X(rr)+' 0H'+X(bw-rr)+A(rr)+X(bw)+' '+n(rr)+'V'+n(hy-q)+'Q'+X(bw)+' '+n(hy)+' '+X(bw+q)+' '+n(hy)+'H'+X(W-hh/2)+A(hh/2)+X(W-hh/2)+' '+n(hy+hh)+'H'+X(bw+q)+'Q'+X(bw)+' '+n(hy+hh)+' '+X(bw)+' '+n(hy+hh+q)+'V'+n(H-rr)+A(rr)+X(bw-rr)+' '+n(H)+'H'+X(rr)+A(rr)+'0 '+n(H-rr)+'V'+n(rr)+A(rr)+X(rr)+' 0Z';
    var sx=f?[L+bw*.1,L+bw*.9]:[bw*.1,bw*.9];
@@ -491,12 +522,12 @@ var SHAPES={
    var Rr=Math.min(H/2,W*.36),cy=H/2,cx=f?W-Rr:Rr,dy=Math.min(H*.15,35),dx=Math.sqrt(Rr*Rr-dy*dy),xi=f?cx-dx:cx+dx,xe=f?dy:W-dy,s=f?1:0;
    var d='M'+n(xi)+' '+n(cy-dy)+'A'+n(Rr)+' '+n(Rr)+' 0 1 '+s+' '+n(xi)+' '+n(cy+dy)+'H'+n(xe)+'A'+n(dy)+' '+n(dy)+' 0 0 '+s+' '+n(xe)+' '+n(cy-dy)+'Z';
    return {d:d,holes:[[xe,cy,Math.min(holeR(W,H),dy*.45)]],safe:[cx-Rr*.62,cy-Rr*.55,cx+Rr*.62,cy+Rr*.55]};}},
- liveedge:{th:'trend',name:'자연 곡선 (라이브엣지)',a:2,gen:function(W,H,r){
+ liveedge:{th:'trend',name:'자연 곡선 (라이브엣지)',a:2,vary:1,gen:function(W,H,r){
    var top=[[0,R(r,.02,.07),1]],bot=[],us=[.18,.36,.54,.72,.88],zt=RI(r,0,4),zb=RI(r,0,4);
    us.forEach(function(u,i){top.push([u+R(r,-.03,.03),i===zt?0:R(r,0,.07)]);});top.push([1,R(r,.02,.07),1],[1,1-R(r,.02,.07),1]);
    us.slice().reverse().forEach(function(u,i){bot.push([u+R(r,-.03,.03),i===zb?1:1-R(r,0,.07)]);});
    return {pts:top.concat(bot,[[0,1-R(r,.02,.07),1]]),hole:[.07,.5],safe:[.12,.18,.88,.82]};}},
- pebble:{th:'trend',name:'조약돌',a:1.6,gen:function(W,H,r){
+ pebble:{th:'trend',name:'조약돌',a:1.6,vary:1,gen:function(W,H,r){
    var pts=[],N=12;for(var i=0;i<N;i++){var t=i/N*Math.PI*2,c=Math.cos(t),s=Math.sin(t),k=1+R(r,-.05,.05);
      pts.push([.5+.5*k*Math.sign(c)*Math.pow(Math.abs(c),.55),.5+.5*k*Math.sign(s)*Math.pow(Math.abs(s),.55)]);}
    var mnx=Math.min.apply(0,pts.map(function(p){return p[0];})),mxx=Math.max.apply(0,pts.map(function(p){return p[0];})),mny=Math.min.apply(0,pts.map(function(p){return p[1];})),mxy=Math.max.apply(0,pts.map(function(p){return p[1];}));
@@ -504,11 +535,11 @@ var SHAPES={
    return {pts:pts,hole:[.1,.5],safe:[.16,.2,.84,.8]};}},
  tray:{th:'trend',name:'양손잡이 트레이',a:1.7,noflip:1,gen:function(W,H){
    var t=clamp(H*.09,14,26),sl=H*.42,x=Math.max(t*1.4,W*.06);
-   return {d:rrect(0,0,W,H,Math.min(W,H)*.1),slots:rrect(x-t/2,H/2-sl/2,t,sl,t/2)+rrect(W-x-t/2,H/2-sl/2,t,sl,t/2),holes:[],safe:[x+t*1.5,H*.15,W-x-t*1.5,H*.85]};}},
+   return {d:rrect(0,0,W,H,Math.min(W,H)*.1*rf()),slots:rrect(x-t/2,H/2-sl/2,t,sl,t/2)+rrect(W-x-t/2,H/2-sl/2,t,sl,t/2),holes:[],safe:[x+t*1.5,H*.15,W-x-t*1.5,H*.85]};}},
  heart:{th:'trend',name:'하트',a:1.1,noflip:1,hole:[.5,.36],safe:[.22,.44,.78,.66],pts:[
   [.5,.2,1],[.62,.04],[.8,0],[.95,.08],[1,.3],[.92,.56],[.72,.79],[.5,1,1],[.28,.79],[.08,.56],[0,.3],[.05,.08],[.2,0],[.38,.04]]},
  /* ---- 도형 ---- */
- rect:{th:'shape',name:'사각',a:1.5,noflip:1,gen:function(W,H){var hr=holeR(W,H);return {d:rrect(0,0,W,H,Math.min(W,H)*.04+4),holes:[[hr*2.6,H/2]],safe:[W*.12,H*.14,W*.88,H*.86]};}},
+ rect:{th:'shape',name:'사각',a:1.5,noflip:1,gen:function(W,H){var hr=holeR(W,H);return {d:rrect(0,0,W,H,(Math.min(W,H)*.04+4)*rf()),holes:[[hr*2.6,H/2]],safe:[W*.12,H*.14,W*.88,H*.86]};}},
  capsule:{th:'shape',name:'캡슐',a:1.8,noflip:1,gen:function(W,H){var rr=Math.min(W,H)/2;return {d:rrect(0,0,W,H,rr),holes:[[W>=H?rr*.55:W/2,W>=H?H/2:rr*.55]],safe:[W*.2,H*.18,W*.8,H*.82]};}},
  oval:{th:'shape',name:'타원',a:1.5,noflip:1,gen:function(W,H){var hr=holeR(W,H);return {d:ellipseD(W/2,H/2,W/2,H/2),holes:[[W*.06+hr*1.6,H/2]],safe:[W*.2,H*.2,W*.8,H*.8]};}},
  hex:{th:'shape',name:'육각형',a:1.6,noflip:1,gen:function(W,H){var c=Math.min(H*.29,W*.3);return {d:roundedPoly([[0,H/2],[c,0],[W-c,0],[W,H/2],[W-c,H],[c,H]],Math.min(W,H)*.05),holes:[[c*.95,H/2]],safe:[c*1.2,H*.15,W-c*1.2,H*.85]};}},
@@ -555,30 +586,81 @@ var SHAPES={
    var xs=p.map(function(q){return q[0];}),ys=p.map(function(q){return q[1];}),mx=Math.min.apply(0,xs),Mx=Math.max.apply(0,xs),my=Math.min.apply(0,ys),My=Math.max.apply(0,ys);
    p=p.map(function(q){return [(q[0]-mx)/(Mx-mx)*W,(q[1]-my)/(My-my)*H];});
    return {d:roundedPoly(p,Math.min(W,H)*.05),holes:[[W/2,H*.48]],safe:[W*.3,H*.56,W*.7,H*.68]};}},
- tree:{th:'nature',name:'나무',a:.8,noflip:1,hole:[.5,.2],safe:[.3,.62,.7,.8],pts:[
-  [.5,0],[.72,.3],[.62,.3,1],[.84,.58],[.72,.58,1],[1,.86],[.6,.86,1],[.6,1,1],[.4,1,1],[.4,.86,1],[0,.86],[.28,.58,1],[.16,.58],[.38,.3,1],[.28,.3]]}
+ tree:{th:'season',name:'크리스마스 트리',a:.8,noflip:1,hole:[.5,.2],safe:[.3,.62,.7,.8],pts:[
+  [.5,0],[.72,.3],[.62,.3,1],[.84,.58],[.72,.58,1],[1,.86],[.6,.86,1],[.6,1,1],[.4,1,1],[.4,.86,1],[0,.86],[.28,.58,1],[.16,.58],[.38,.3,1],[.28,.3]]},
+ wave:{th:'trend',name:'웨이브',a:2,gen:function(W,H){var P=[],k=12,i,u;
+   for(i=0;i<=k;i++){u=i/k;P.push([u,.06*(1-Math.cos(Math.PI*3*u))/2,(i===0||i===k)?1:0]);}
+   for(i=k;i>=0;i--){u=i/k;P.push([u,1-.06*(1+Math.cos(Math.PI*3*u))/2,(i===0||i===k)?1:0]);}
+   return {pts:P,hole:[.06,.5],safe:[.12,.18,.88,.82]};}},
+ wine:{th:'trend',name:'와인병',a:2.6,hole:[.93,.5],safe:[.08,.2,.6,.8],pts:[
+  [0,.08],[.04,0],[.62,0],[.7,.04],[.78,.28],[.83,.32,1],[.97,.32],[1,.36],[1,.64],[.97,.68],[.83,.68,1],[.78,.72],[.7,.96],[.62,1],[.04,1],[0,.92]]},
+ cheese:{th:'trend',name:'치즈 조각',a:1.6,gen:function(W,H){var m=Math.min(W,H);
+   return {d:roundedPoly([[0,H*.38],[W,0],[W,H],[0,H]],m*.05),slots:circleD(W*.6,H*.52,m*.07)+circleD(W*.8,H*.78,m*.05)+circleD(W*.3,H*.74,m*.045),holes:[[W*.9,H*.17]],safe:[W*.08,H*.5,W*.55,H*.92]};}},
+ cow:{th:'animal',name:'소',a:1.5,hole:[.12,.3],safe:[.3,.24,.86,.74],pts:[
+  [0,.42],[.02,.2],[.04,0,1],[.1,.14],[.18,.14],[.22,0,1],[.25,.18],[.32,.16],[.6,.14],[.88,.16],[.96,.22],[1,.1,1],[1,.4],[.97,.62],[.95,1,1],[.84,1,1],[.82,.82],[.62,.84],[.6,1,1],[.5,1,1],[.48,.84],[.3,.82],[.28,1,1],[.18,1,1],[.16,.78],[.14,.64],[.04,.62]]},
+ sitcat:{th:'animal',name:'앉은 고양이',a:.75,hole:[.36,.2],safe:[.2,.6,.74,.92],pts:[
+  [.18,0,1],[.3,.12],[.42,.12],[.54,0,1],[.58,.2],[.56,.34],[.7,.46],[.8,.7],[.86,.86],[.96,.78],[1,.86],[.92,.98],[.7,1],[.12,1],[.06,.9],[.1,.7],[.2,.42],[.16,.3],[.14,.14]]},
+ dino:{th:'animal',name:'공룡',a:1.3,hole:[.11,.09],safe:[.3,.5,.78,.8],pts:[
+  [0,.1],[.04,0],[.16,0],[.21,.06],[.21,.3],[.25,.42],[.5,.4],[.72,.46],[.86,.58],[1,.86,1],[.84,.8],[.82,1,1],[.72,1,1],[.7,.86],[.42,.86],[.4,1,1],[.3,1,1],[.28,.84],[.16,.7],[.1,.42],[.1,.19],[.02,.19]]},
+ duck:{th:'animal',name:'오리',a:1.25,hole:[.27,.15],safe:[.3,.52,.82,.86],pts:[
+  [0,.26,1],[.1,.22],[.14,.08],[.26,0],[.38,.06],[.42,.22],[.38,.4],[.6,.42],[.8,.36],[1,.2,1],[.98,.5],[.9,.78],[.7,.96],[.4,1],[.2,.9],[.14,.68],[.2,.5],[.14,.38],[.08,.34],[0,.34,1]]},
+ penguin:{th:'animal',name:'펭귄',a:.8,noflip:1,hole:[.5,.14],safe:[.28,.42,.72,.86],pts:[
+  [.5,0],[.7,.06],[.76,.22],[.8,.4],[.98,.56],[.94,.62],[.82,.58],[.84,.82],[.76,.94],[.8,1],[.2,1],[.24,.94],[.16,.82],[.18,.58],[.06,.62],[.02,.56],[.2,.4],[.24,.22],[.3,.06]]},
+ couple:{th:'people',name:'커플',a:1.4,hole:[.33,.2],safe:[.16,.72,.84,.95],pts:[
+  [0,1,1],[.02,.8],[.08,.68],[.2,.62],[.27,.6,1],[.22,.5],[.19,.28],[.25,.1],[.34,.04],[.42,.1],[.47,.26],[.45,.46],[.5,.54,1],[.55,.46],[.53,.26],[.58,.1],[.66,.04],[.75,.1],[.81,.28],[.78,.5],[.73,.6,1],[.8,.62],[.92,.68],[.98,.8],[1,1,1]]},
+ pineapple:{th:'food',name:'파인애플',a:.7,noflip:1,hole:[.5,.42],safe:[.2,.55,.8,.86],pts:[
+  [.5,0,1],[.56,.14],[.66,.04,1],[.64,.2],[.76,.14,1],[.68,.28],[.86,.38],[.98,.6],[.92,.86],[.7,1],[.3,1],[.08,.86],[.02,.6],[.14,.38],[.32,.28],[.24,.14,1],[.36,.2],[.34,.04,1],[.44,.14]]},
+ avocado:{th:'food',name:'아보카도',a:.75,hole:[.5,.12],safe:[.18,.5,.82,.88],pts:[
+  [.5,0],[.66,.04],[.74,.2],[.82,.42],[.96,.6],[.96,.82],[.8,.98],[.5,1],[.2,.98],[.04,.82],[.04,.6],[.18,.42],[.26,.2],[.34,.04]]},
+ cactus:{th:'nature',name:'선인장',a:.85,noflip:1,hole:[.5,.1],safe:[.42,.6,.58,.9],pts:[
+  [.4,1,1],[.4,.66],[.22,.66],[.12,.6],[.08,.5],[.08,.26],[.12,.2],[.18,.2],[.22,.26],[.22,.48],[.4,.48,1],[.4,.08],[.44,0],[.56,0],[.6,.08],[.6,.38,1],[.76,.38],[.78,.18],[.84,.12],[.9,.18],[.92,.42],[.88,.54],[.76,.56],[.6,.56,1],[.6,1,1]]},
+ flower:{th:'nature',name:'꽃',a:1,noflip:1,gen:function(){return {pts:polarPts(function(t){return .62+.38*Math.pow(Math.abs(Math.cos(2.5*(t+Math.PI/2))),.7);},120),hole:[.5,.5],safe:[.3,.62,.7,.74]};}},
+ sun:{th:'nature',name:'해님',a:1,noflip:1,gen:function(){return {pts:polarPts(function(t){return .88+.12*Math.cos(12*t);},144),hole:[.5,.16],safe:[.22,.3,.78,.7]};}},
+ snowman:{th:'season',name:'눈사람',a:.8,noflip:1,hole:[.5,.15],safe:[.24,.74,.76,.94],pts:[
+  [.5,0],[.64,.04],[.7,.16],[.66,.3],[.6,.34,1],[.8,.42],[.86,.56],[.82,.66],[.74,.7,1],[.94,.78],[1,.9],[.94,1],[.06,1],[0,.9],[.06,.78],[.26,.7,1],[.18,.66],[.14,.56],[.2,.42],[.4,.34,1],[.34,.3],[.3,.16],[.36,.04]]},
+ pumpkin:{th:'season',name:'할로윈 호박',a:1.25,noflip:1,hole:[.5,.3],safe:[.2,.42,.8,.84],pts:[
+  [.5,.14,1],[.46,.02],[.54,0],[.58,.12,1],[.7,.1],[.86,.14],[.98,.34],[1,.6],[.92,.86],[.74,.98],[.5,.96],[.26,.98],[.08,.86],[0,.6],[.02,.34],[.14,.14],[.3,.1]]},
+ house:{th:'season',name:'집',a:1,gen:function(W,H,r,f){var X=function(v){return f?W-v:v;},p=[[0,H*.45],[W/2,0],[W*.7,H*.16],[W*.7,H*.04],[W*.84,H*.04],[W*.84,H*.29],[W,H*.45],[W,H],[0,H]].map(function(q){return [X(q[0]),q[1]];});
+   return {d:roundedPoly(p,Math.min(W,H)*.03),holes:[[W/2,H*.27]],safe:[W*.12,H*.52,W*.88,H*.9]};}},
+ gift:{th:'season',name:'선물 상자',a:1.1,noflip:1,hole:[.5,.6],safe:[.12,.72,.88,.94],pts:[
+  [0,.32,1],[.4,.32,1],[.28,.2],[.2,.06],[.3,0],[.44,.12],[.5,.22,1],[.56,.12],[.7,0],[.8,.06],[.72,.2],[.6,.32,1],[1,.32,1],[1,1,1],[0,1,1]]}
 };
+var INFO={paddle:['썰기·서빙','가장 많이 쓰는 기본 손잡이 도마예요. 손잡이 구멍으로 걸어 두기 좋아요.'],round:['서빙·피자','원형 몸통에 긴 손잡이가 달려 피자 필(피자 삽)로도 써요.'],liveedge:['서빙','나무 바깥쪽 자연 곡선을 살린 스타일로 요즘 가장 인기예요.'],pebble:['썰기·서빙','모서리 없이 둥근 조약돌 모양이라 손에 걸리지 않아요.'],tray:['서빙','양쪽 손잡이 구멍으로 음식을 담아 옮기기 쉬워요.'],heart:['선물·서빙','기념일·집들이 선물로 꾸준히 인기예요.'],toast:['서빙·아이','토스트·샌드위치 서빙에 딱 맞는 식빵 모양이에요.'],wave:['썰기·서빙','긴 쪽이 물결치는 웨이브 도마로 국내에서 인기 있는 디자인이에요.'],bread:['빵·서빙','바게트·식빵을 통째로 올리는 길고 좁은 빵 보드예요.'],wine:['서빙·선물','와인 안주·치즈를 올리는 와인병 모양 보드예요.'],cheese:['서빙','구멍 뚫린 치즈 조각 모양 치즈 보드예요. 구멍도 재단선이에요.'],
+whale:['썰기·서빙','사각형에 가까워 자투리가 적은 인기 동물 도마예요.'],fish:['서빙','회·생선 요리 서빙에 잘 어울려요.'],pig:['썰기·서빙','정육 도마의 대표 모양이에요. 고기 손질용으로 인기예요.'],cat:['아이·선물','고양이 얼굴 모양. 반려묘 가족 선물로 좋아요.'],bear:['아이·선물','둥근 곰 얼굴. 아이 간식 접시로 좋아요.'],bird:['서빙','작은 새 모양 서빙 보드예요.'],dog:['아이·선물','귀가 처진 강아지 얼굴이에요.'],rabbit:['아이·선물','긴 귀 토끼. 귀 부분은 얇아서 천천히 잘라 주세요.'],chicken:['서빙','치킨·바비큐 서빙에 어울리는 닭 모양이에요.'],turtle:['아이·서빙','등껍질 부분이 넓어서 쓰기 편해요.'],cow:['썰기·서빙','스테이크·고기 서빙에 어울리는 소 모양이에요.'],sitcat:['장식·선물','앉아 있는 고양이 옆모습. 세로로 긴 모양이에요.'],dino:['아이','목이 긴 공룡. 아이 간식 보드로 인기예요.'],duck:['아이·서빙','통통한 오리 모양 보드예요.'],penguin:['아이·선물','통통한 펭귄. 세로로 긴 모양이에요.'],
+ginger:['아이·시즌','진저브레드 쿠키 모양. 크리스마스에 인기예요.'],face:['장식·선물','올림머리 얼굴 실루엣이에요.'],bust:['장식','사람 상반신 실루엣이에요.'],hand:['장식·선물','손바닥 모양. 손가락이 얇아 장식용으로 추천해요.'],chef:['서빙·선물','셰프 모자. 요리 좋아하는 분께 선물하기 좋아요.'],foot:['장식','발바닥 모양이에요.'],pigtail:['아이·선물','양갈래 머리 아이 얼굴이에요.'],couple:['선물','나란히 선 두 사람. 결혼·커플 선물로 좋아요.'],
+rect:['썰기','가장 기본 모양으로 자투리가 거의 없어요.'],capsule:['썰기·서빙','양 끝이 둥근 캡슐형이에요.'],oval:['서빙','부드러운 타원형이에요.'],hex:['서빙·캠핑','육각 플레이트. 캠핑 플레이팅에 인기예요.'],oct:['썰기·서빙','네 모서리를 잘라낸 팔각형이에요.'],arch:['서빙','위가 둥근 아치(창문) 모양이에요.'],teardrop:['서빙','한쪽이 뾰족한 물방울 모양이에요.'],diamond:['서빙','마름모. 멋있지만 자투리가 많아요.'],tri:['서빙','둥근 삼각형. 피자 조각 느낌이에요.'],
+apple:['아이·서빙','꼭지까지 살린 사과 모양이에요.'],pear:['서빙','세로로 긴 배 모양이에요.'],lemon:['서빙','레몬 모양. 과일·칵테일 서빙에 좋아요.'],strawberry:['아이','꼭지 잎이 들쭉날쭉한 딸기예요.'],melon:['서빙','반달 모양 수박 조각. 자투리가 적어요.'],mushroom:['아이·서빙','갓이 넓은 버섯 모양이에요.'],pineapple:['서빙','잎이 뾰족한 파인애플이에요.'],avocado:['서빙','브런치 서빙에 어울리는 아보카도예요.'],
+leaf:['서빙','꼭지가 손잡이 역할을 하는 나뭇잎이에요.'],cloud:['아이','몽실몽실한 구름이에요.'],mountain:['서빙·캠핑','산 능선 모양. 캠핑 감성이에요.'],moon:['장식·아이','초승달 모양이에요.'],star:['아이·시즌','별 모양. 자투리가 많은 편이에요.'],cactus:['장식','선인장. 팔 부분이 얇아요.'],flower:['선물','다섯 꽃잎 꽃 모양이에요.'],sun:['아이','물결 테두리 해님이에요.'],
+snowman:['시즌','겨울 파티에 어울리는 눈사람이에요.'],tree:['시즌','크리스마스 트리. 겨울 파티 보드로 좋아요.'],pumpkin:['시즌','할로윈 호박 모양이에요.'],house:['선물','굴뚝 있는 집. 집들이 선물로 좋아요.'],gift:['시즌·선물','리본 달린 선물 상자예요.']};
+/* 재단 난이도: 점 개수와 뾰족한(안쪽으로 꺾인) 곳이 많을수록 어려움 */
+function difficulty(k){var sh=SHAPES[k];if(!sh.pts){return {flower:2,sun:2,star:2,cheese:2,tray:2,wave:1,liveedge:1}[k]||1;}
+  var c=sh.pts.filter(function(p){return p[2];}).length,sc=sh.pts.length+c*2;return sc<22?1:sc<38?2:3;}
+var DIFF=['','쉬움','보통','어려움'];
 var THEMES=[
- {id:'trend',name:'트렌드',desc:'패들·라이브엣지·하트·식빵',icon:'paddle'},
- {id:'animal',name:'동물',desc:'고래·돼지·강아지·거북이',icon:'whale'},
- {id:'people',name:'사람',desc:'진저브레드·손바닥·얼굴',icon:'ginger'},
+ {id:'trend',name:'트렌드',desc:'패들·웨이브·빵 보드·와인병',icon:'paddle'},
+ {id:'animal',name:'동물',desc:'고래·돼지·소·공룡·펭귄',icon:'whale'},
+ {id:'people',name:'사람',desc:'진저브레드·셰프·커플',icon:'ginger'},
  {id:'shape',name:'도형',desc:'사각·캡슐·육각·아치',icon:'hex'},
- {id:'food',name:'과일·채소',desc:'사과·레몬·딸기·버섯',icon:'apple'},
- {id:'nature',name:'자연',desc:'나뭇잎·구름·산·별',icon:'leaf'}
+ {id:'food',name:'과일·채소',desc:'사과·파인애플·아보카도',icon:'apple'},
+ {id:'nature',name:'자연',desc:'나뭇잎·선인장·꽃·산',icon:'leaf'},
+ {id:'season',name:'시즌·기념일',desc:'눈사람·트리·호박·집',icon:'snowman'},
+ {id:'all',name:'전체 보기',desc:'모든 모양, 사용률 순',icon:'heart'}
 ];
-function shapesOf(theme){return Object.keys(SHAPES).filter(function(k){return SHAPES[k].th===theme;});}
+function shapesOf(theme){return Object.keys(SHAPES).filter(function(k){return SHAPES[k].th!=='_'&&(theme==='all'||SHAPES[k].th===theme);});}
 
 /* 모양 만들기: {d(외곽+구멍), W, H, safe, holes} */
 function buildShape(c){
-  var sh=SHAPES[c.shape]||SHAPES.whale,W=c.w,H=c.h,r=mulberry32(c.sseed||1),hr=holeR(W,H),flip=!!c.flip&&!sh.noflip;
+  CUR_ROUND=c.round==null?.3:c.round;
+  var vary=c.vary==null?.25:c.vary,sh=SHAPES[c.shape]||SHAPES.whale,W=c.w,H=c.h,r=mulberry32(c.sseed||1),hr=holeR(W,H),flip=!!c.flip&&!sh.noflip;
   var src=sh.gen?sh.gen(W,H,r,flip):{pts:sh.pts,hole:sh.hole,safe:sh.safe},d,holes=[],safe,slots=src.slots||'';
+  var kf=c.fat||0,pw=1/(1+kf),fz=function(x){var d=x-.5;return .5+(d<0?-1:1)*Math.pow(Math.abs(2*d),pw)/2;};
   if(src.pts){
-    var j=sh.gen?0:.008;
-    var P=src.pts.map(function(p){var u=p[0],v=p[1];if(!p[2]&&j){u=clamp(u+R(r,-j,j),0,1);v=clamp(v+R(r,-j,j),0,1);}if(flip)u=1-u;return [u*W,v*H,p[2]];});
+    var j=(sh.gen&&!sh.vary)?0:.003+.04*vary;
+    var P=src.pts.map(function(p){var u=p[0],v=p[1];if(!p[2]&&j){u=clamp(u+R(r,-j,j),0,1);v=clamp(v+R(r,-j,j),0,1);}u=fz(u);v=fz(v);if(flip)u=1-u;return [u*W,v*H,p[2]];});
     if(flip)P.reverse();
     d=curveD(P);
-    if(src.hole)holes.push([(flip?1-src.hole[0]:src.hole[0])*W,src.hole[1]*H,hr]);
-    var s=src.safe;safe=flip?[(1-s[2])*W,s[1]*H,(1-s[0])*W,s[3]*H]:[s[0]*W,s[1]*H,s[2]*W,s[3]*H];
+    if(src.hole){var hx=fz(src.hole[0]);holes.push([(flip?1-hx:hx)*W,fz(src.hole[1])*H,hr]);}
+    var s=src.safe.map(fz);safe=flip?[(1-s[2])*W,s[1]*H,(1-s[0])*W,s[3]*H]:[s[0]*W,s[1]*H,s[2]*W,s[3]*H];
   } else {d=src.d;holes=(src.holes||[]).map(function(h){return [h[0],h[1],h[2]||hr];});safe=src.safe;}
   if(!c.hole)holes=[];
   return {d:d+slots+holes.map(function(h){return circleD(h[0],h[1],h[2]);}).join(''),W:W,H:H,safe:safe,holes:holes,name:sh.name,a:sh.a};
@@ -633,8 +715,9 @@ function grainSVG(w,W,H,r){
 function textEm(t){var e=0;for(var i=0;i<t.length;i++)e+=t.charCodeAt(i)>0x2e80?1:.6;return e;}
 function engraving(c,geo,color){
   var txt=(c.text||'').trim();if(!txt)return '';
-  var s=geo.safe,sw=s[2]-s[0],sh=s[3]-s[1],fs=Math.min(sh*.32,sw*.86/Math.max(2.5,textEm(txt)));
-  return '<text x="'+n((s[0]+s[2])/2)+'" y="'+n((s[1]+s[3])/2+fs*.35)+'" text-anchor="middle" font-size="'+n(fs)+'" font-family="'+FONTS[c.font].replace(/"/g,'')+'" font-weight="700" fill="'+color+'">'+esc(txt)+'</text>';
+  var s=geo.safe,sw=s[2]-s[0],sh=s[3]-s[1],pos=c.tpos||'center',side=pos==='left'||pos==='right',em=Math.max(2.5,textEm(txt)),fs=Math.min(sh*(side?.22:.26),sw*(side?.5:.86)/em);
+  var x=pos==='left'?s[0]:pos==='right'?s[2]:(s[0]+s[2])/2,y=pos==='top'?s[1]+fs*.95:pos==='bottom'?s[3]-fs*.25:(s[1]+s[3])/2+fs*.35,anc=pos==='left'?'start':pos==='right'?'end':'middle';
+  return '<text x="'+n(x)+'" y="'+n(y)+'" text-anchor="'+anc+'" font-size="'+n(fs)+'" font-family="'+FONTS[c.font].replace(/"/g,'')+'" font-weight="700" fill="'+color+'">'+esc(txt)+'</text>';
 }
 
 /* ---------- 도마 그리기 ---------- */
@@ -676,9 +759,9 @@ function boardSVG(c,opt){var b=renderBoard(c,opt);var px=opt&&opt.px;return '<sv
 
 var OIL_TIP={zelkova:"느티나무는 결이 촘촘해 오일이 천천히 스며요. 얇게 여러 번 바르면 무늬가 선명해져요.",pine:"송판은 무르고 오일을 많이 먹어요. 첫날은 2~3번 연달아 발라 주세요. 송진이 배어 나오는 곳은 닦아 내고 발라요.",walnut:"월넛은 오일을 바르면 색이 한층 짙고 깊어져요. 미네랄 오일과 밀랍 마무리가 잘 어울려요.",maple:"메이플은 밝은 색이라 텅오일·아마인유는 노랗게 변할 수 있어요. 색을 지키려면 미네랄 오일을 쓰세요.",teak:"티크는 원래 오일이 많아 잘 안 먹어요. 얇게 1~2번 바르고 충분히 닦아 내면 돼요.",olive:"올리브는 오일이 많고 촘촘해서 조금만 발라도 돼요. 얇게 바르고 바로 닦아 주세요.",hinoki:"편백은 향이 좋아 향이 강한 오일은 피하세요. 무른 편이라 첫 마감은 3번 이상 해 주세요.",ginkgo:"은행나무는 오일이 고르게 잘 스며요. 기본 순서대로 3~4번이면 충분해요.",camphor:"캄포는 향과 붉은 무늬가 오일을 바르면 더 살아나요. 기본 순서대로 해 주세요.",acacia:"아카시아 집성판은 이음매로 물이 들지 않게 옆면과 끝면을 특히 꼼꼼히 발라 주세요.",rubber:"고무나무는 오일을 꽤 먹어요. 첫 마감은 3~4번 충분히 해 주세요. 집성 이음매도 꼼꼼히 발라요."};
 /* ---------- 상태 ---------- */
-var S={w:380,h:250,t:25,wood:'zelkova',theme:'animal',shape:'whale',sseed:5,flip:false,text:'',font:'serif',hole:true,gseed:7};
-function cfg(){return {w:S.w,h:S.h,t:S.t,wood:S.wood,text:S.text,font:S.font,hole:S.hole,gseed:S.gseed,shape:S.shape,sseed:S.sseed,flip:S.flip};}
-function rankShapes(){return shapesOf(S.theme).map(function(k){var g=buildShape({shape:k,w:S.w,h:S.h,sseed:5,hole:S.hole});return {k:k,g:g,y:yieldOf(g)};}).sort(function(a,b){return (b.y||0)-(a.y||0);});}
+var S={w:380,h:250,t:25,wood:'zelkova',theme:'animal',shape:'whale',sseed:5,flip:false,vary:.25,round:.3,fat:0,text:'',tpos:'center',font:'serif',hole:true,gseed:7};
+function cfg(){return {w:S.w,h:S.h,t:S.t,wood:S.wood,text:S.text,tpos:S.tpos,vary:S.vary,round:S.round,fat:S.fat,font:S.font,hole:S.hole,gseed:S.gseed,shape:S.shape,sseed:S.sseed,flip:S.flip};}
+function rankShapes(){return shapesOf(S.theme).map(function(k){var g=buildShape({shape:k,w:S.w,h:S.h,sseed:5,hole:S.hole,vary:S.vary,round:S.round,fat:S.fat});return {k:k,g:g,y:yieldOf(g)};}).sort(function(a,b){return (b.y||0)-(a.y||0);});}
 function pct(v){return v==null?'-':Math.round(v*100)+'%';}
 
 /* ---------- 화면 ---------- */
@@ -706,6 +789,12 @@ function buildControls(){
   num('inW','w',150,800);num('inH','h',100,600);num('inT','t',10,60);
   var tmr;$('inText').addEventListener('input',function(){S.text=this.value;clearTimeout(tmr);tmr=setTimeout(update,150);});
   $('inFont').addEventListener('change',function(){S.font=this.value;update();});
+  $('inTpos').addEventListener('change',function(){S.tpos=this.value;update();});
+  var tm2;var slide=function(id,key){$(id).addEventListener('input',function(){S[key]=this.value/100;clearTimeout(tm2);tm2=setTimeout(update,60);});};
+  slide('inVary','vary');slide('inRound','round');
+  $('inFat').addEventListener('input',function(){var v=+this.value;S.fat=v<0?v/50*.4:v/50*.45;clearTimeout(tm2);tm2=setTimeout(update,60);});
+  $('btnReset').addEventListener('click',function(){S.fat=0;S.vary=.25;S.round=.3;$('inFat').value=0;$('inVary').value=25;$('inRound').value=30;update();});
+  $('btnNew2').addEventListener('click',function(){S.sseed=(Math.random()*1e9)|0;update();});
   $('inHole').addEventListener('change',function(){S.hole=this.checked;update();});
   $('btnNew').addEventListener('click',function(){S.sseed=(Math.random()*1e9)|0;update();});
   $('btnFlip').addEventListener('click',function(){S.flip=!S.flip;update();});
@@ -732,16 +821,18 @@ function update(){
   var w=WOOD[S.wood];
   $('woodDetail').innerHTML='<div><h3>'+w.name+'<span>'+w.en+'</span></h3><p>'+w.desc+'</p></div><div class="ratings"><div>단단함 '+dots(w.hard)+'</div><div>물에 강함 '+dots(w.water)+'</div><div>가격대 '+dots(w.price)+'</div></div>';
   sizeTip();
+  $('varyVal').textContent=Math.round(S.vary*100);$('roundVal').textContent=Math.round(S.round*100);var fv=Math.round(S.fat<0?S.fat/.4*50:S.fat/.45*50);$('fatVal').textContent=(fv>0?'+':'')+fv;
   $('oilTip').textContent=w.name+' 팁: '+OIL_TIP[w.id];
   var th0=THEMES.filter(function(t){return t.id===S.theme;})[0],ranked=rankShapes();
-  $('shapeLabel').textContent=th0.name+' 디자인 시안 '+ranked.length+'가지';
+  $('shapeLabel').textContent=(S.theme==='all'?'전체':th0.name)+' 디자인 시안 '+ranked.length+'가지';
   $('shapeGrid').innerHTML=ranked.map(function(o){
-    return '<button type="button" class="shape-card" data-shape-id="'+o.k+'" aria-pressed="'+(o.k===S.shape)+'"><svg viewBox="'+n(-S.w*.04)+' '+n(-S.h*.04)+' '+n(S.w*1.08)+' '+n(S.h*1.08)+'" aria-hidden="true"><path d="'+o.g.d+'" fill="currentColor" fill-rule="evenodd"/></svg><b>'+o.g.name+'</b><small>사용률 '+pct(o.y)+'</small></button>';}).join('');
+    return '<button type="button" class="shape-card" data-shape-id="'+o.k+'" aria-pressed="'+(o.k===S.shape)+'"><svg viewBox="'+n(-S.w*.04)+' '+n(-S.h*.04)+' '+n(S.w*1.08)+' '+n(S.h*1.08)+'" aria-hidden="true"><path d="'+o.g.d+'" fill="currentColor" fill-rule="evenodd"/></svg><b>'+o.g.name+'</b><small>'+pct(o.y)+' · '+DIFF[difficulty(o.k)]+'</small></button>';}).join('');
   var c=cfg(),main=renderBoard(c,{dims:true,uid:'main'}),y=yieldOf(main.geo),sh=SHAPES[c.shape];
   $('stage').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+n(main.vbW)+' '+n(main.vbH)+'" role="img" aria-label="'+esc(main.geo.name)+' 도마 시안">'+main.inner+'</svg>';
   $('btnFlip').hidden=!!sh.noflip;
   var ratio=(S.w/S.h)/sh.a,ratioTip=(ratio>1.4||ratio<1/1.4)?'<p class="tip warn">'+esc(sh.name)+' 모양은 가로:세로가 '+sh.a+':1 정도일 때 가장 자연스러워요. 지금은 '+n(S.w/S.h,2)+':1이라 '+(ratio>1?'옆으로 늘어나 보여요.':'위아래로 늘어나 보여요.')+' <button type="button" class="btn small" id="btnRatio">비율 맞추기</button></p>':'';
-  $('yield').innerHTML=y==null?ratioTip:'<div class="yield-row"><span>원판 사용률 <b class="mono">'+pct(y)+'</b></span><span class="note">빗금 = 잘려 나가는 자투리 '+pct(1-y)+'</span></div><div class="bar" role="img" aria-label="원판 사용률 '+pct(y)+'"><i style="width:'+pct(y)+'"></i></div>'+ratioTip;
+  var inf=INFO[c.shape]||['',''],dfc=difficulty(c.shape),info='<div class="shape-info"><b>'+esc(main.geo.name)+'</b><span>'+esc(inf[1])+'</span><span class="meta">추천 용도 '+esc(inf[0])+' · 재단 난이도 '+DIFF[dfc]+' · 어울리는 비율 '+sh.a+':1</span>'+(dfc===3?'<span class="meta">좁게 파인 곳이 많아요. 실톱(스크롤쏘)이나 레이저 재단을 추천해요.</span>':'')+'</div>';
+  $('yield').innerHTML=info+(y==null?ratioTip:'<div class="yield-row"><span>원판 사용률 <b class="mono">'+pct(y)+'</b></span><span class="note">빗금 = 잘려 나가는 자투리 '+pct(1-y)+'</span></div><div class="bar" role="img" aria-label="원판 사용률 '+pct(y)+'"><i style="width:'+pct(y)+'"></i></div>'+ratioTip);
   var th=THEMES.filter(function(t){return t.id===S.theme;})[0];
   $('spec').innerHTML=[['나무',w.name],['원판',S.w+'×'+S.h+'mm'],['두께',S.t+'mm'],['모양',th.name+' · '+main.geo.name]].map(function(p){return '<div><dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd></div>';}).join('');
   saveState();
@@ -787,11 +878,11 @@ function laserSVG(c){
    '<rect id="stock" x="0" y="0" width="'+W+'" height="'+H+'" fill="none" stroke="#0000ff" stroke-width="0.1" stroke-dasharray="2 2"/>'+
    '<g id="cut" fill="none" stroke="#ff0000" stroke-width="0.1"><path d="'+geo.d+'"/></g>'+(tx?'<g id="engrave">'+tx+'</g>':'')+'</svg>';
 }
-function saveState(){try{localStorage.setItem('dosesang-state',JSON.stringify({w:S.w,h:S.h,t:S.t,wood:S.wood,theme:S.theme,shape:S.shape,font:S.font,hole:S.hole}));}catch(e){}}
-function loadState(){try{var o=JSON.parse(localStorage.getItem('dosesang-state')||'null');if(o&&WOOD[o.wood]&&shapesOf(o.theme).length){Object.assign(S,o);if(!SHAPES[S.shape]||SHAPES[S.shape].th!==S.theme)S.shape=shapesOf(S.theme)[0];}}catch(e){}}
+function saveState(){try{localStorage.setItem('dosesang-state',JSON.stringify({w:S.w,h:S.h,t:S.t,wood:S.wood,theme:S.theme,shape:S.shape,font:S.font,hole:S.hole,tpos:S.tpos,vary:S.vary,round:S.round,fat:S.fat}));}catch(e){}}
+function loadState(){try{var o=JSON.parse(localStorage.getItem('dosesang-state')||'null');if(o&&WOOD[o.wood]&&shapesOf(o.theme).length){Object.assign(S,o);if(!SHAPES[S.shape]||(S.theme!=='all'&&SHAPES[S.shape].th!==S.theme))S.shape=shapesOf(S.theme)[0];}}catch(e){}}
 
 /* ---------- 메인 예시: 레이저가 재단선을 따라 그려지는 모습 ---------- */
-var heroI=0,HERO=[{wood:'zelkova',shape:'whale',w:420,h:210},{wood:'maple',shape:'pig',w:400,h:250},{wood:'walnut',shape:'paddle',w:440,h:240},{wood:'hinoki',shape:'fish',w:420,h:220},{wood:'acacia',shape:'heart',w:300,h:270},{wood:'olive',shape:'liveedge',w:440,h:220},{wood:'camphor',shape:'bear',w:300,h:280},{wood:'ginkgo',shape:'apple',w:280,h:280},{wood:'teak',shape:'leaf',w:440,h:220}];
+var heroI=0,HERO=[{wood:'zelkova',shape:'whale',w:420,h:210},{wood:'maple',shape:'pig',w:400,h:250},{wood:'walnut',shape:'paddle',w:440,h:240},{wood:'hinoki',shape:'fish',w:420,h:220},{wood:'acacia',shape:'heart',w:300,h:270},{wood:'olive',shape:'liveedge',w:440,h:220},{wood:'camphor',shape:'bear',w:300,h:280},{wood:'ginkgo',shape:'apple',w:280,h:280},{wood:'teak',shape:'leaf',w:440,h:220},{wood:'walnut',shape:'wine',w:460,h:180},{wood:'maple',shape:'cow',w:420,h:280}];
 function hero(){
   var h=HERO[heroI%HERO.length];heroI++;
   var c={w:h.w,h:h.h,t:28,wood:h.wood,text:'',font:'serif',hole:true,gseed:heroI*13,shape:h.shape,sseed:heroI*977,flip:false};
@@ -802,7 +893,7 @@ function hero(){
 }
 
 loadState();buildControls();
-$('inText').value=S.text;$('inFont').value=S.font;$('inHole').checked=S.hole;
+$('inText').value=S.text;$('inFont').value=S.font;$('inTpos').value=S.tpos;$('inVary').value=Math.round(S.vary*100);$('inRound').value=Math.round(S.round*100);$('inFat').value=Math.round(S.fat<0?S.fat/.4*50:S.fat/.45*50);$('inHole').checked=S.hole;
 update();hero();setInterval(hero,4800);getDL();
 })();
 </script>
