@@ -6,9 +6,9 @@
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>도마 (Cutting Board)</title>
+<title>석이의 도마세상</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="크기, 나무, 테마만 고르면 나만의 도마 디자인 시안을 만들어 주는 무료 웹사이트">
+<meta name="description" content="크기, 나무, 테마만 고르면 고래·물고기·하트 같은 도마 모양 재단 시안을 만들어 주는 무료 웹사이트">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=Gowun+Batang:wght@700&family=Gaegu:wght@700&display=swap">
@@ -65,7 +65,7 @@ button,input,select{font:inherit;color:inherit}
 .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding-block:24px 48px}
 .hero-copy{min-width:0;display:flex;flex-direction:column;gap:18px}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.hero h1{font-size:clamp(44px,7vw,84px);letter-spacing:-.01em}
+.hero h1{font-size:clamp(40px,6.2vw,76px);letter-spacing:-.01em}
 .hero h1 small{display:block;font-family:var(--f-mono);font-size:.26em;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .lead{font-size:clamp(17px,2vw,20px);max-width:32em;margin:0}
 .lead em{font-style:normal;background:linear-gradient(transparent 60%,var(--accent-soft) 60%);padding:0 2px}
@@ -83,9 +83,10 @@ button,input,select{font:inherit;color:inherit}
 .hero-stage .board{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 .hero-stage svg{width:100%;height:100%;transition:opacity .5s}
 .hero-tag{align-self:flex-start;font-family:var(--f-mono);font-size:12px;color:var(--stage-ink);background:rgba(255,255,255,.6);padding:5px 10px;border-radius:999px}
-.drawing .eng *{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.4s ease-out forwards}
+.drawing .cutline{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.6s ease-in-out forwards,fade .6s 2.8s forwards}
+@keyframes fade{to{stroke-opacity:0}}
 @keyframes draw{to{stroke-dashoffset:0}}
-@media (prefers-reduced-motion: reduce){.drawing .eng *{animation:none;stroke-dasharray:none}.btn{transition:none}.hero-stage svg{transition:none}}
+@media (prefers-reduced-motion: reduce){.drawing .cutline{animation:none;display:none}.btn{transition:none}.hero-stage svg{transition:none}}
 
 /* designer */
 .designer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:28px;align-items:start;padding-block:8px 56px}
@@ -190,38 +191,83 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
   .wood-detail,.opts{grid-template-columns:1fr}
   .top nav{display:none}
 }
+.themes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.theme{position:relative}
+.theme-unused{content:"";position:absolute;left:50%;bottom:-11px;width:16px;height:16px;background:var(--accent-soft);border-right:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);transform:translateX(-50%) rotate(45deg)}
+.submenu{background:var(--accent-soft);border:1.5px solid var(--accent);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.submenu-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.submenu-head b{font-family:var(--f-display);font-weight:400;font-size:19px}
+.shape-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.shape-card{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink)}
+.shape-card svg{width:100%;height:58px;color:var(--muted)}
+.shape-card b{font-size:13px;font-weight:500;line-height:1.25;text-align:center}
+.shape-card small{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.shape-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.shape-card[aria-pressed="true"] svg{color:var(--accent)}
+.theme svg{width:72px;height:56px}
+.yield{display:flex;flex-direction:column;gap:8px}
+.yield:empty{display:none}
+.yield-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.yield-row b{font-size:20px;color:var(--accent)}
+.bar{height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
+.yield .tip{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.variant span b{color:var(--accent);font-weight:500}
+.oil-band{background:var(--surface);border-top:1px solid var(--line)}
+.oil{padding-block:44px 52px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:28px 40px}
+.oil-head{display:flex;flex-direction:column;gap:12px;min-width:0}
+.oil-head h2{font-size:clamp(28px,4vw,40px)}
+.oil-head p{margin:0;max-width:34em}
+.oil-steps{list-style:none;counter-reset:st;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:0}
+.oil-steps li{counter-increment:st;background:var(--bg);border-radius:14px;padding:14px 14px 14px 52px;position:relative;display:flex;flex-direction:column;gap:4px}
+.oil-steps li::before{content:counter(st);position:absolute;left:14px;top:14px;width:26px;height:26px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);font-family:var(--f-mono);font-size:13px;display:flex;align-items:center;justify-content:center}
+.oil-steps b{font-size:15.5px}
+.oil-steps span{font-size:14px;color:var(--muted)}
+.oil-grid{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.oil-card{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0;overflow-x:auto}
+.oil-card h3{font-size:20px}
+.oil-card ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.oil-table{border-collapse:collapse;width:100%;font-size:14px}
+.oil-table th,.oil-table td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.oil-table th{font-size:12.5px;color:var(--muted);font-weight:500}
+.oil-table td:first-child{font-weight:500}
+.oil-table .ok{color:var(--accent);font-weight:700;white-space:nowrap}
+.oil-table .no{color:var(--muted);white-space:nowrap}
+@media (max-width: 980px){.oil{grid-template-columns:1fr}.oil-grid{grid-template-columns:1fr}}
+@media (max-width: 560px){.oil-steps{grid-template-columns:1fr}}
 </style>
 
 <div class="wrap">
   <header class="top">
-    <a class="logo" href="#top" aria-label="도마 처음으로">
-      <svg width="40" height="28" viewBox="0 0 40 28" aria-hidden="true"><rect x="1" y="3" width="28" height="22" rx="6" fill="#c08a56"/><path d="M29 11h6a3 3 0 0 1 0 6h-6z" fill="#c08a56"/><path d="M5 10q10-4 20 0M5 15q10-3 20 1M5 20q10-4 20 0" stroke="#7a4a26" stroke-width="1" fill="none" opacity=".6"/><circle cx="35" cy="14" r="1.2" fill="#eef0e8"/></svg>
-      <b>도마</b><span>Cutting Board</span>
+    <a class="logo" href="#top" aria-label="석이의 도마세상 처음으로">
+      <svg width="46" height="26" viewBox="0 0 46 26" aria-hidden="true"><path d="M2 6Q2 1 7 1H24Q30 1 32 6L34 11L37 4Q38 2 40 3L41 8L45 7Q46 11 42 13L35 16L32 23Q31 25 28 25H5Q1 25 1 21V18L7 16L1 14Z" fill="#c08a56"/><circle cx="7" cy="7" r="2" fill="#eef0e8"/></svg>
+      <b>석이의 도마세상</b><span>Cutting Board</span>
     </a>
     <nav aria-label="주요 메뉴">
       <a href="#design">디자인하기</a>
       <a href="#wood-step">나무 고르기</a>
       <a href="#guide">다운로드 안내</a>
+      <a href="#oil">오일 마감</a>
     </nav>
   </header>
 
   <section class="hero" id="top">
     <div class="hero-copy">
       <div class="eyebrow">누구나 · 무료 · 설치 없이</div>
-      <h1>도마<small>Cutting Board</small></h1>
-      <p class="lead">크기와 나무를 고르고 테마만 누르면 <em>나만의 도마 디자인 시안</em>이 바로 나와요. 그림을 못 그려도 괜찮아요.</p>
+      <h1>석이의 도마세상<small>Cutting Board</small></h1>
+      <p class="lead">크기와 나무를 고르고 테마만 누르면 고래, 물고기, 하트처럼 <em>자르기만 하면 되는 도마 모양 시안</em>이 바로 나와요. 원판을 최대한 아끼는 모양으로 만들어 드려요.</p>
       <ol class="flow" aria-label="만드는 순서">
         <li><span>크기·두께</span></li>
         <li><span>나무 종류</span></li>
-        <li><span>테마</span></li>
-        <li><span>시안 다운로드</span></li>
+        <li><span>테마 (도마 모양)</span></li>
+        <li><span>재단 도면 다운로드</span></li>
       </ol>
       <div class="cta-row">
         <a class="btn primary" href="#design">디자인 시작하기</a>
         <span class="note">회원가입 없이 바로 쓸 수 있어요</span>
       </div>
     </div>
-    <div class="hero-stage" aria-label="자동으로 바뀌는 도마 디자인 예시">
+    <div class="hero-stage" aria-label="자동으로 바뀌는 도마 모양 예시">
       <div class="board" id="heroBoard"></div>
       <div class="hero-tag mono" id="heroTag">예시 시안</div>
     </div>
@@ -230,8 +276,8 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
   <main class="designer" id="design">
     <div class="panel">
       <section class="step" aria-labelledby="s1">
-        <div class="step-head"><span class="step-no">1</span><h2 id="s1">크기와 두께</h2></div>
-        <p class="hint">자주 쓰는 크기를 고르거나 가로·세로를 직접 입력하세요. 단위는 mm예요.</p>
+        <div class="step-head"><span class="step-no">1</span><h2 id="s1">원판 크기와 두께</h2></div>
+        <p class="hint">자를 나무 원판의 크기예요. 도마 모양은 이 사각형을 꽉 채우도록 만들어져요. 단위는 mm예요.</p>
         <div class="label">크기</div>
         <div class="chips" id="sizeChips"></div>
         <div class="dims">
@@ -241,8 +287,6 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
         </div>
         <div class="label">두께</div>
         <div class="chips" id="thickChips"></div>
-        <div class="label">모양</div>
-        <div class="chips" id="shapeChips"></div>
         <p class="tip" id="sizeTip"></p>
       </section>
 
@@ -254,53 +298,95 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
       </section>
 
       <section class="step" aria-labelledby="s3">
-        <div class="step-head"><span class="step-no">3</span><h2 id="s3">테마</h2></div>
-        <p class="hint">테마를 고르면 각인 그림 시안 4개가 자동으로 만들어져요.</p>
-        <div class="themes" id="themeGrid"></div>
+        <div class="step-head"><span class="step-no">3</span><h2 id="s3">테마 (도마 모양)</h2></div>
+        <p class="hint">테마를 누르면 아래에 그 테마의 도마 모양 시안이 펼쳐져요. 마음에 드는 모양을 고르세요. 숫자는 지금 원판 크기에서의 원판 사용률이에요.</p>
+        <div class="themes" id="themeGrid" role="tablist" aria-label="테마"></div>
+        <div class="submenu" id="submenu" role="tabpanel">
+          <div class="submenu-head"><b id="shapeLabel"></b><span class="note">사용률 높은 순</span></div>
+          <div class="shape-grid" id="shapeGrid"></div>
+        </div>
       </section>
 
       <section class="step" aria-labelledby="s4">
-        <div class="step-head"><span class="step-no">4</span><h2 id="s4">각인 옵션 <span class="note">(선택)</span></h2></div>
+        <div class="step-head"><span class="step-no">4</span><h2 id="s4">추가 옵션 <span class="note">(선택)</span></h2></div>
+        <label class="check"><input type="checkbox" id="inHole"> 걸이 구멍 뚫기</label>
         <div class="opts">
-          <div class="field"><label for="inText">새길 문구 · 이름</label><div class="inp"><input id="inText" type="text" maxlength="24" placeholder="예: 우리집 부엌, Kim's Kitchen" style="font-family:var(--f-body)"></div></div>
+          <div class="field"><label for="inText">새길 문구 · 이름</label><div class="inp"><input id="inText" type="text" maxlength="20" placeholder="예: 우리집 부엌, Kim's Kitchen" style="font-family:var(--f-body)"></div></div>
           <div class="field"><label for="inFont">글씨체</label><select id="inFont"><option value="serif">명조 (단정한)</option><option value="sans">고딕 (깔끔한)</option><option value="hand">손글씨 (귀여운)</option></select></div>
         </div>
-        <div class="field">
-          <label for="inScale">그림 크기 <span class="mono" id="scaleVal"></span></label>
-          <div class="row"><input id="inScale" type="range" min="30" max="90" step="5"></div>
-        </div>
-        <label class="check"><input type="checkbox" id="inBorder"> 가장자리 테두리 라인 넣기</label>
       </section>
     </div>
 
     <aside class="preview" aria-labelledby="pvTitle">
       <div class="pv-head">
-        <h2 id="pvTitle">디자인 시안</h2>
+        <h2 id="pvTitle">도마 모양 시안</h2>
         <div class="row">
-          <button class="btn small" id="btnNew" type="button">새 시안 받기</button>
+          <button class="btn small" id="btnNew" type="button">모양 살짝 바꾸기</button>
+          <button class="btn small" id="btnFlip" type="button">좌우 뒤집기</button>
           <button class="btn small" id="btnGrain" type="button">나뭇결 바꾸기</button>
         </div>
       </div>
       <div class="stage" id="stage"></div>
+      <div class="yield" id="yield"></div>
       <dl class="spec" id="spec"></dl>
-      <div class="label">시안 고르기</div>
-      <div class="variants" id="variants"></div>
       <div class="label">다운로드</div>
       <div class="dl">
-        <button type="button" class="main" id="dlSheet"><b>시안 이미지 (PNG)</b><small>그림과 사양표가 한 장에</small></button>
-        <button type="button" id="dlSvg"><b>디자인 파일 (SVG)</b><small>확대해도 선명해요</small></button>
-        <button type="button" id="dlLaser"><b>레이저 각인용 (SVG)</b><small>실제 mm 크기 도면</small></button>
+        <button type="button" class="main" id="dlLaser"><b>재단 도면 (SVG)</b><small>실제 mm 크기, 자르는 선</small></button>
+        <button type="button" id="dlSheet"><b>시안 이미지 (PNG)</b><small>그림과 사양표가 한 장에</small></button>
+        <button type="button" id="dlSvg"><b>디자인 그림 (SVG)</b><small>나뭇결 포함, 확대해도 선명</small></button>
       </div>
     </aside>
   </main>
 
   <section class="guide" id="guide" aria-label="다운로드 안내">
-    <div><h3>시안 이미지 (PNG)</h3><p>도마 그림, 실제 치수, 나무 정보가 한 장에 담겨요. 공방이나 제작 업체에 메신저로 보내 상담받기 좋아요.</p></div>
-    <div><h3>디자인 파일 (SVG)</h3><p>나뭇결과 각인이 들어간 벡터 파일이에요. 아무리 키워도 깨지지 않아 인쇄나 홍보물에 쓸 수 있어요.</p></div>
-    <div><h3>레이저 각인용 (SVG)</h3><p>실제 mm 크기로 저장돼요. 빨간 선은 외곽 재단선, 검은 선은 각인선이에요. 레이저 프로그램에서 문구는 윤곽선으로 변환해 주세요.</p></div>
+    <div><h3>재단 도면 (SVG)</h3><p>실제 mm 크기로 저장돼요. 빨간 선이 자르는 선(외곽·구멍), 검은 글씨가 각인이에요. 레이저·CNC 프로그램에서 바로 열거나, 100% 크기로 인쇄해 원판에 대고 그려 쓸 수 있어요.</p></div>
+    <div><h3>시안 이미지 (PNG)</h3><p>도마 모양, 실제 치수, 원판 사용률, 나무 정보가 한 장에 담겨요. 공방이나 제작 업체에 메신저로 보내 상담받기 좋아요.</p></div>
+    <div><h3>원판 사용률</h3><p>원판(사각형)에서 도마로 쓰이는 부분의 비율이에요. 빗금 친 부분이 잘려 나가는 자투리예요. 높을수록 나무를 아낄 수 있어요.</p></div>
   </section>
 </div>
-<footer><div class="wrap"><span>도마 (Cutting Board) · 나만의 도마 디자인</span><span>나무 특징은 일반적인 참고 정보예요. 실제 원목은 한 그루마다 색과 무늬가 달라요.</span></div></footer>
+<div class="oil-band"><div class="wrap">
+  <section class="oil" id="oil" aria-labelledby="oilTitle">
+    <div class="oil-head">
+      <div class="eyebrow">마지막 단계</div>
+      <h2 id="oilTitle">오일 마감 가이드</h2>
+      <p>자른 도마는 오일을 먹여야 물과 얼룩을 막고 나뭇결이 살아나요. 처음 한 번은 아래 순서대로 3~4번 반복하고, 그다음부터는 한 달에 한 번이면 충분해요.</p>
+      <p class="tip" id="oilTip"></p>
+    </div>
+    <ol class="oil-steps">
+      <li><b>사포로 다듬기</b><span>120방 → 180방 → 240방 순서로 나뭇결 방향을 따라 문질러요. 자른 모서리와 걸이 구멍 안쪽도 둥글게 다듬어 주세요.</span></li>
+      <li><b>물 묻혀 결 세우기</b><span>젖은 천으로 표면을 한 번 닦고 말리면 잔털이 일어나요. 240~320방으로 가볍게 다시 문지르면 나중에 설거지해도 표면이 거칠어지지 않아요.</span></li>
+      <li><b>오일 듬뿍 바르기</b><span>먼지를 털고 오일을 넉넉히 부어 천이나 손으로 앞·뒤·옆면, 구멍 안쪽까지 골고루 펴 발라요. 끝면(나뭇결 단면)은 특히 많이 먹어요.</span></li>
+      <li><b>스며들게 두고 닦기</b><span>20~30분 두었다가 표면에 남은 오일을 마른 천으로 깨끗이 닦아 내요. 남겨 두면 끈적해져요.</span></li>
+      <li><b>말리기</b><span>세워서 12~24시간 말려요. 미네랄 오일은 마르지 않고 스며드는 오일이라 만졌을 때 묻어나지 않으면 돼요.</span></li>
+      <li><b>3~4번 반복 후 왁스</b><span>3~5단계를 3~4번 반복해요. 마지막에 밀랍(비즈왁스) 크림을 얇게 바르고 문질러 광을 내면 물방울이 맺힐 만큼 방수가 좋아져요.</span></li>
+    </ol>
+    <div class="oil-grid">
+      <div class="oil-card">
+        <h3>어떤 오일을 쓸까요?</h3>
+        <table class="oil-table">
+          <thead><tr><th scope="col">오일</th><th scope="col">추천</th><th scope="col">특징</th></tr></thead>
+          <tbody>
+            <tr><td>식품용 미네랄 오일</td><td class="ok">추천</td><td>냄새·맛이 없고 상하지 않아요. 가장 무난한 기본 오일</td></tr>
+            <tr><td>밀랍 + 미네랄 오일 (우드버터)</td><td class="ok">추천</td><td>마무리용. 방수와 광택이 좋아요</td></tr>
+            <tr><td>순수 텅오일 · 생 아마인유</td><td>가능</td><td>단단한 막이 생겨요. 완전히 굳을 때까지 1~2주 걸려요</td></tr>
+            <tr><td>올리브유 · 식용유</td><td class="no">비추천</td><td>시간이 지나면 산패해서 냄새가 나요</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="oil-card">
+        <h3>평소 관리</h3>
+        <ul>
+          <li>쓴 뒤에는 중성세제로 손 설거지하고 물기를 닦아 세워 말려요.</li>
+          <li>식기세척기, 물에 오래 담가 두기, 전자레인지는 피해 주세요. 갈라지고 휘어요.</li>
+          <li>표면이 하얗게 마른 느낌이 들면 오일을 한 번 더 발라 주세요.</li>
+          <li>냄새가 배면 굵은 소금과 레몬 반쪽으로 문질러 닦아요.</li>
+        </ul>
+        <p class="tip warn">텅오일·아마인유를 닦은 헝겊은 뭉쳐 두면 스스로 열이 나서 불이 날 수 있어요. 펼쳐서 말리거나 물에 적셔 버려 주세요.</p>
+      </div>
+    </div>
+  </section>
+</div></div>
+<footer><div class="wrap"><span>석이의 도마세상 · Cutting Board</span><span>나무 특징은 일반적인 참고 정보예요. 실제 원목은 한 그루마다 색과 무늬가 달라요.</span></div></footer>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -349,226 +435,164 @@ var WOODS=[
 var WOOD={};WOODS.forEach(function(w){WOOD[w.id]=w;});
 var SIZES=[{id:'s',label:'소형',w:300,h:200},{id:'m',label:'중형',w:380,h:250},{id:'l',label:'대형',w:450,h:300},{id:'xl',label:'특대',w:500,h:350}];
 var THICK=[15,20,25,30,40];
-var SHAPES=[{id:'rect',label:'사각'},{id:'round',label:'라운드'},{id:'oval',label:'타원'},{id:'handle',label:'손잡이형'}];
 var FONTS={serif:"'Gowun Batang','Nanum Myeongjo','Batang','AppleMyungjo',Georgia,serif",sans:"'IBM Plex Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif",hand:"'Gaegu','Nanum Pen Script','Comic Sans MS',cursive"};
 var FONT_LABEL={serif:'명조',sans:'고딕',hand:'손글씨'};
+function L(x1,y1,x2,y2,a){return "<line x1=\""+n(x1)+"\" y1=\""+n(y1)+"\" x2=\""+n(x2)+"\" y2=\""+n(y2)+"\" "+(a||"")+"/>";}
 
-/* ---------- 그림 도구 (100×100 상자, 가운데가 0,0) ---------- */
-var F='fill="currentColor" stroke="none"';
-function C(x,y,r,a){return '<circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+n(r)+'" '+(a||'')+'/>';}
-function E(x,y,rx,ry,a){return '<ellipse cx="'+n(x)+'" cy="'+n(y)+'" rx="'+n(rx)+'" ry="'+n(ry)+'" '+(a||'')+'/>';}
-function P(d,a){return '<path d="'+d+'" '+(a||'')+'/>';}
-function L(x1,y1,x2,y2,a){return '<line x1="'+n(x1)+'" y1="'+n(y1)+'" x2="'+n(x2)+'" y2="'+n(y2)+'" '+(a||'')+'/>';}
-function poly(pts,close){return 'M'+pts.map(function(p){return n(p[0])+' '+n(p[1]);}).join('L')+(close?'Z':'');}
-function heart(cx,cy,s,a){return P('M'+n(cx)+' '+n(cy+s*.9)+'C'+n(cx-s*1.4)+' '+n(cy-s*.1)+' '+n(cx-s*.6)+' '+n(cy-s*1.1)+' '+n(cx)+' '+n(cy-s*.35)+'C'+n(cx+s*.6)+' '+n(cy-s*1.1)+' '+n(cx+s*1.4)+' '+n(cy-s*.1)+' '+n(cx)+' '+n(cy+s*.9)+'Z',a);}
-function star4(x,y,s){return P('M'+n(x)+' '+n(y-s)+'Q'+n(x)+' '+n(y)+' '+n(x+s)+' '+n(y)+'Q'+n(x)+' '+n(y)+' '+n(x)+' '+n(y+s)+'Q'+n(x)+' '+n(y)+' '+n(x-s)+' '+n(y)+'Q'+n(x)+' '+n(y)+' '+n(x)+' '+n(y-s)+'Z',F);}
-function outerArc(bx,by,br,ax,ay,ar){
-  var dx=bx-ax,dy=by-ay,d=Math.hypot(dx,dy);
-  var a=(ar*ar-br*br+d*d)/(2*d),h=Math.sqrt(Math.max(0,ar*ar-a*a));
-  var mx=ax+a*dx/d,my=ay+a*dy/d;
-  var p1=[mx-h*dy/d,my+h*dx/d],p2=[mx+h*dy/d,my-h*dx/d];
-  var TAU=Math.PI*2,norm=function(v){return ((v%TAU)+TAU)%TAU;};
-  var t1=Math.atan2(p1[1]-by,p1[0]-bx),t2=Math.atan2(p2[1]-by,p2[0]-bx),tm=Math.atan2(dy,dx);
-  var span=norm(t2-t1);if(norm(tm-t1)>span)span-=TAU;
-  var pts=[];for(var k=0;k<=28;k++){var t=t1+span*k/28;pts.push([bx+br*Math.cos(t),by+br*Math.sin(t)]);}
-  return P(poly(pts));
-}
-function mirror(r,s){return r()<.5?'<g transform="scale(-1 1)">'+s+'</g>':s;}
+/* ---------- 도마 모양 (테마) : 원판(W×H)을 꽉 채우도록 만든 재단 라인 ---------- */
+function rrect(x,y,w,h,r){r=Math.min(r,w/2,h/2);var a='A'+n(r)+' '+n(r)+' 0 0 1 ';return 'M'+n(x+r)+' '+n(y)+'H'+n(x+w-r)+a+n(x+w)+' '+n(y+r)+'V'+n(y+h-r)+a+n(x+w-r)+' '+n(y+h)+'H'+n(x+r)+a+n(x)+' '+n(y+h-r)+'V'+n(y+r)+a+n(x+r)+' '+n(y)+'Z';}
+function ellipseD(cx,cy,rx,ry){return 'M'+n(cx-rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx+rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx-rx)+' '+n(cy)+'Z';}
+function circleD(cx,cy,r){return ellipseD(cx,cy,r,r);}
+function roundedPoly(P,r){var N=P.length,d='';for(var i=0;i<N;i++){var p0=P[(i-1+N)%N],p1=P[i],p2=P[(i+1)%N];
+  var v1=[p0[0]-p1[0],p0[1]-p1[1]],v2=[p2[0]-p1[0],p2[1]-p1[1]],l1=Math.hypot(v1[0],v1[1]),l2=Math.hypot(v2[0],v2[1]),rr=Math.min(r,l1/2,l2/2);
+  var a=[p1[0]+v1[0]/l1*rr,p1[1]+v1[1]/l1*rr],b=[p1[0]+v2[0]/l2*rr,p1[1]+v2[1]/l2*rr];
+  d+=(i?'L':'M')+n(a[0])+' '+n(a[1])+'Q'+n(p1[0])+' '+n(p1[1])+' '+n(b[0])+' '+n(b[1]);}return d+'Z';}
+/* 점들을 부드럽게 잇는 닫힌 곡선. 세 번째 값이 1인 점은 뾰족한 꼭짓점 */
+function curveD(P){var N=P.length,t=1/6,d='M'+n(P[0][0])+' '+n(P[0][1]);
+  for(var i=0;i<N;i++){var p0=P[(i-1+N)%N],p1=P[i],p2=P[(i+1)%N],p3=P[(i+2)%N];
+    var c1=p1[2]?p1:[p1[0]+(p2[0]-p0[0])*t,p1[1]+(p2[1]-p0[1])*t],c2=p2[2]?p2:[p2[0]-(p3[0]-p1[0])*t,p2[1]-(p3[1]-p1[1])*t];
+    d+='C'+n(c1[0])+' '+n(c1[1])+' '+n(c2[0])+' '+n(c2[1])+' '+n(p2[0])+' '+n(p2[1]);}
+  return d+'Z';}
+function holeR(W,H){return clamp(Math.min(W,H)*.045,6,12);}
 
-var MOTIFS={
- /* ---- 트렌드 ---- */
- mountain:{theme:'trend',name:'산과 해',draw:function(r){
-   var s='',arch=r()<.65;
-   if(arch)s+=P('M-40 40V-8A40 40 0 0 1 40 -8V40Z');
-   var sx=R(r,-10,10),sy=-22,sr=R(r,7,10);
-   s+=C(sx,sy,sr);
-   if(r()<.5)for(var i=0;i<8;i++){var a=i*Math.PI/4;s+=L(sx+Math.cos(a)*(sr+3),sy+Math.sin(a)*(sr+3),sx+Math.cos(a)*(sr+7),sy+Math.sin(a)*(sr+7));}
-   s+=P('M-40 26L-22 '+n(R(r,-6,2))+'L-8 10L12 '+n(R(r,-14,-4))+'L40 26');
-   s+=P('M-40 32L-28 18L-12 '+n(R(r,2,10))+'L6 26L20 14L40 32');
-   s+=L(-30,36,30,36);if(!arch)s+=L(-18,41,18,41);
-   return s;}},
- botanical:{theme:'trend',name:'보태니컬',draw:function(r){
-   var bend=R(r,-14,14),P0=[0,44],P1=[bend,0],P2=[R(r,-6,6),-44];
-   var s=P('M0 44Q'+n(bend)+' 0 '+n(P2[0])+' -44');
-   var N=RI(r,6,9);
-   for(var i=0;i<N;i++){
-     var t=.12+i*(.84/N),u=1-t;
-     var x=u*u*P0[0]+2*u*t*P1[0]+t*t*P2[0],y=u*u*P0[1]+2*u*t*P1[1]+t*t*P2[1];
-     var dx=2*u*(P1[0]-P0[0])+2*t*(P2[0]-P1[0]),dy=2*u*(P1[1]-P0[1])+2*t*(P2[1]-P1[1]);
-     var ang=Math.atan2(dy,dx)*180/Math.PI,side=i%2?1:-1,la=ang+side*R(r,40,60),len=R(r,14,20)*(1-t*.35);
-     s+='<g transform="translate('+n(x)+' '+n(y)+') rotate('+n(la)+')">'+P('M0 0Q'+n(len*.5)+' '+n(-len*.32)+' '+n(len)+' 0Q'+n(len*.5)+' '+n(len*.32)+' 0 0Z')+L(1,0,len*.75,0,'stroke-width="1"')+'</g>';
-   }
-   s+='<g transform="translate('+n(P2[0])+' -44) rotate(-90)">'+P('M0 0Q6 -4 12 0Q6 4 0 0Z')+'</g>';
-   return '<g transform="rotate('+n(R(r,-25,25))+')">'+s+'</g>';}},
- waves:{theme:'trend',name:'물결',draw:function(r){
-   var s=C(0,0,45),rows=RI(r,6,8),A=R(r,2,3.5),f=R(r,.12,.2),ph=R(r,0,6);
-   s+=C(R(r,-14,14),-31,R(r,5,7),r()<.5?F:'');
-   for(var i=0;i<rows;i++){var y=-16+i*(52/(rows-1)),hw=Math.sqrt(45*45-y*y)-5,pts=[];
-     for(var x=-hw;x<=hw;x+=2)pts.push([x,y+A*Math.sin(x*f+ph+i*.8)]);s+=P(poly(pts));}
-   return s;}},
- lettering:{theme:'trend',name:'레터링',draw:function(r){
-   var ph=pick(r,[['Bon','Appétit'],['Good Food','Good Mood'],['Home','Made'],['Fresh','& Tasty'],['Cook','with Love'],['Kitchen','Story']]);
-   var fam="Georgia,'Times New Roman',serif",s='';
-   var fr=RI(r,0,2);
-   if(fr===0)s+=C(0,0,46);else if(fr===1)s+=P('M-44 -30Q-44 -44 -30 -44H30Q44 -44 44 -30V30Q44 44 30 44H-30Q-44 44 -44 30Z');
-   s+='<text x="0" y="-2" text-anchor="middle" font-family="'+fam+'" font-style="italic" font-size="18" '+F+'>'+esc(ph[0])+'</text>';
-   s+='<text x="0" y="15" text-anchor="middle" font-family="'+fam+'" font-size="9.5" letter-spacing="2" '+F+'>'+esc(ph[1].toUpperCase())+'</text>';
-   s+=L(-34,24,-8,24)+L(8,24,34,24)+P('M0 21L3 24L0 27L-3 24Z',F);
-   s+=P('M-14 -24Q0 -32 14 -24','stroke-width="1.2"')+star4(0,-33,3)+C(-18,-22,1.2,F)+C(18,-22,1.2,F);
-   s+='<text x="0" y="35" text-anchor="middle" font-family="'+fam+'" font-size="5.5" letter-spacing="3" '+F+'>SINCE '+new Date().getFullYear()+'</text>';
-   return s;}},
- citrus:{theme:'trend',name:'레몬 슬라이스',draw:function(r){
-   var Rr=R(r,36,41),s=C(0,0,Rr)+C(0,0,Rr-4.5,'stroke-width="1"'),k=RI(r,8,11),inner=Rr-8.5,g=.07;
-   for(var i=0;i<k;i++){var a0=i*Math.PI*2/k+g,a1=(i+1)*Math.PI*2/k-g;
-     s+=P('M'+n(Math.cos(a0)*4)+' '+n(Math.sin(a0)*4)+'L'+n(Math.cos(a0)*inner)+' '+n(Math.sin(a0)*inner)+'A'+n(inner)+' '+n(inner)+' 0 0 1 '+n(Math.cos(a1)*inner)+' '+n(Math.sin(a1)*inner)+'L'+n(Math.cos(a1)*4)+' '+n(Math.sin(a1)*4)+'Z');
-     if(r()<.35){var am=(a0+a1)/2;s+=E(Math.cos(am)*inner*.45,Math.sin(am)*inner*.45,1.4,2.6,F+' transform="rotate('+n(am*180/Math.PI+90)+' '+n(Math.cos(am)*inner*.45)+' '+n(Math.sin(am)*inner*.45)+')"');}}
-   if(r()<.6)s+='<g transform="translate('+n(Rr*.55)+' '+n(-Rr*.9)+') rotate(-35)">'+P('M0 0Q8 -6 16 0Q8 6 0 0Z')+L(1,0,12,0,'stroke-width="1"')+'</g>';
-   return s;}},
- arches:{theme:'trend',name:'무지개 아치',draw:function(r){
-   var cnt=RI(r,4,6),base=16,s=L(-46,base,46,base);
-   for(var i=0;i<cnt;i++){var rr=42-i*(30/cnt);s+=P('M'+n(-rr)+' '+base+'A'+n(rr)+' '+n(rr)+' 0 0 1 '+n(rr)+' '+base,(i%2&&r()<.5)?'stroke-dasharray="3 3"':'');}
-   s+=P('M-8 '+base+'A8 8 0 0 1 8 '+base+'Z',F);
-   for(var j=0;j<5;j++)s+=C(-32+j*16,base+10,1.4,F);
-   s+=star4(R(r,30,40),R(r,-34,-24),4)+star4(R(r,-40,-30),R(r,-30,-20),3);
-   return s;}},
+var SHAPES={
  /* ---- 동물 ---- */
- cat:{theme:'animal',name:'고양이',draw:function(r){
-   var s=P('M-28 -4L-31 -40L-9 -27Q0 -30 9 -27L31 -40L28 -4Q34 31 0 32Q-34 31 -28 -4Z');
-   s+=P('M-25 -16L-27 -32L-15 -25','stroke-width="1.2"')+P('M25 -16L27 -32L15 -25','stroke-width="1.2"');
-   if(r()<.5)s+=E(-12,1,3.2,4.6,F)+E(12,1,3.2,4.6,F);else s+=P('M-17 2Q-12 -3 -7 2')+P('M7 2Q12 -3 17 2');
-   s+=P('M-3.5 10L3.5 10L0 14Z',F)+P('M0 14Q-3 19 -8 16')+P('M0 14Q3 19 8 16');
-   s+=L(-16,13,-38,9)+L(-16,17,-38,19)+L(16,13,38,9)+L(16,17,38,19);
-   if(r()<.45)s+=P('M-6 -22V-15')+P('M0 -24V-16')+P('M6 -22V-15');
-   if(r()<.4)s+=heart(36,-34,5,F);
-   return s;}},
- fish:{theme:'animal',name:'물고기',draw:function(r){
-   var s=P('M-38 0Q-15 -26 18 -4L38 -18L33 0L38 18L18 4Q-15 26 -38 0Z');
-   s+=C(-24,-3,3,F)+P('M-14 -12Q-8 0 -14 12');
-   [[-3,-7],[7,-6],[-3,3],[7,3],[2,-2]].forEach(function(q){s+=P('M'+(q[0]-4)+' '+q[1]+'Q'+q[0]+' '+(q[1]+5)+' '+(q[0]+4)+' '+q[1],'stroke-width="1.2"');});
-   if(r()<.7)s+=C(-44,-10,2)+C(-47,-20,3)+C(-43,-30,1.5);
-   if(r()<.5)s+=P('M-40 34Q-30 28 -20 34T0 34T20 34T40 34','stroke-width="1.4"');
-   return mirror(r,s);}},
- bird:{theme:'animal',name:'작은 새',draw:function(r){
-   var s=C(0,0,21)+P('M20 -7L31 -3L20 1')+C(9,-7,2.4,F);
-   s+=P('M-12 -2Q-4 14 12 6')+P('M-12 -2Q2 0 12 6','stroke-width="1.2"');
-   s+=P('M-20 -6L-36 -16L-32 0L-21 4')+L(-5,21,-5,29)+L(4,21,4,29);
-   s+=P('M-46 30Q0 27 46 32')+P('M30 31Q36 24 42 27Q37 33 30 31Z',F);
-   if(r()<.5)s+=L(30,-30,30,-20)+C(28,-20,2.5,F)+P('M30 -30Q34 -29 35 -25','stroke-width="1.2"');
-   else s+=heart(-30,-30,5,F);
-   return mirror(r,s);}},
- whale:{theme:'animal',name:'고래',draw:function(r){
-   var s=P('M-38 5C-38 -20 5 -25 22 -6L30 -2Q36 -14 46 -16Q40 -6 44 4Q36 2 30 4Q20 20 -10 22Q-38 24 -38 5Z');
-   s+=P('M-34 12Q-10 20 16 9','stroke-width="1.2"')+C(-24,0,2.2,F)+P('M-37 8Q-31 12 -25 9','stroke-width="1.2"');
-   s+=P('M-20 -20Q-22 -32 -30 -36')+P('M-20 -20Q-18 -32 -10 -36')+L(-20,-20,-20,-38);
-   s+=P('M-45 36Q-37.5 30 -30 36T-15 36T0 36T15 36T30 36T45 36','stroke-width="1.4"');
-   if(r()<.5)s+=star4(36,-34,4)+star4(28,-42,2.5);
-   return mirror(r,s);}},
- rabbit:{theme:'animal',name:'토끼',draw:function(r){
-   var s=E(-10,-27,7,17,'transform="rotate(-8 -10 -10)"')+E(10,-27,7,17,'transform="rotate(8 10 -10)"');
-   s+=E(-10,-27,2.6,11,'stroke-width="1.2" transform="rotate(-8 -10 -10)"')+E(10,-27,2.6,11,'stroke-width="1.2" transform="rotate(8 10 -10)"');
-   s+=E(0,11,24,21)+C(-9,8,2.6,F)+C(9,8,2.6,F)+P('M-3 15L3 15L0 18Z',F)+P('M0 18V21M0 21Q-4 25 -7 22M0 21Q4 25 7 22');
-   s+=L(-12,17,-28,14)+L(-12,20,-28,22)+L(12,17,28,14)+L(12,20,28,22);
-   if(r()<.5)s+=E(-15,15,3.5,2,F+' opacity=".35"')+E(15,15,3.5,2,F+' opacity=".35"');
-   return s;}},
- bear:{theme:'animal',name:'곰',draw:function(r){
-   var s=C(0,6,27)+outerArc(-21,-18,10,0,6,27)+outerArc(21,-18,10,0,6,27)+C(-22,-20,4,F)+C(22,-20,4,F);
-   s+=E(0,16,11,8)+E(0,12,4,2.6,F)+P('M0 15V19M0 19Q-4 23 -7 20M0 19Q4 23 7 20');
-   if(r()<.5)s+=C(-10,0,2.6,F)+C(10,0,2.6,F);else s+=P('M-14 1Q-10 -3 -6 1')+P('M6 1Q10 -3 14 1');
-   if(r()<.5)s+=P('M-18 34L-6 38L-18 42Z')+P('M18 34L6 38L18 42Z')+C(0,38,3,F);
-   return s;}},
- pig:{theme:'animal',name:'아기 돼지',draw:function(r){
-   var s=C(0,4,28)+P('M-23 -12L-27 -36L-7 -23')+P('M23 -12L27 -36L7 -23');
-   s+=E(0,12,12,8)+E(-4,12,1.8,3,F)+E(4,12,1.8,3,F)+C(-11,-4,2.5,F)+C(11,-4,2.5,F);
-   if(r()<.6)s+=E(-19,8,3.5,2,F+' opacity=".35"')+E(19,8,3.5,2,F+' opacity=".35"');
-   if(r()<.5)s+=P('M30 20q8 -4 4 -9q-4 -4 -6 2q-1 5 6 6','stroke-width="1.4"');
-   return s;}},
+ whale:{th:'animal',name:'고래',a:2,hole:[.085,.25],safe:[.14,.2,.7,.9],pts:[
+  [0,.2],[.03,.03],[.12,0],[.45,0],[.64,.04],[.74,.15],[.8,.34,1],[.825,.22],[.855,.13],[.885,.17],[.895,.34,1],
+  [.94,.24],[.975,.17],[1,.2],[.99,.36],[.93,.5],[.85,.62],[.79,.84],[.71,1],[.4,1],[.08,1],[.01,.93],[0,.8,1],[.13,.73,1],[0,.66,1]]},
+ fish:{th:'animal',name:'물고기',a:1.9,hole:[.15,.4],safe:[.22,.22,.7,.8],pts:[
+  [0,.5],[.05,.2],[.25,.02],[.5,0],[.68,.18],[.78,.38,1],[.94,.04],[1,0,1],[.98,.28],[.9,.5,1],[.98,.72],[1,1,1],[.94,.96],[.78,.62,1],[.68,.82],[.5,1],[.25,.98],[.05,.8]]},
+ pig:{th:'animal',name:'돼지',a:1.6,hole:[.13,.38],safe:[.28,.22,.86,.8],pts:[
+  [0,.27,1],[.1,.23],[.13,.11],[.17,0,1],[.27,.09],[.45,.03],[.72,.03],[.9,.13],[.95,.24],[.99,.15],[1,.27],[.975,.36],[.98,.6],[.93,.79],[.91,1,1],[.79,1,1],[.76,.87],[.4,.89],[.34,1,1],[.22,1,1],[.19,.8],[.1,.66],[0,.55,1]]},
+ cat:{th:'animal',name:'고양이',a:1.25,hole:[.5,.28],safe:[.18,.42,.82,.88],pts:[
+  [0,.6],[.02,.3],[.06,0,1],[.3,.13],[.5,.1],[.7,.13],[.94,0,1],[.98,.3],[1,.6],[.9,.9],[.5,1],[.1,.9]]},
+ bear:{th:'animal',name:'곰',a:1.1,hole:[.5,.3],safe:[.18,.42,.82,.88],pts:[
+  [0,.62],[.04,.34],[.04,.13],[.15,0],[.28,.03],[.31,.16,1],[.5,.12],[.69,.16,1],[.72,.03],[.85,0],[.96,.13],[.96,.34],[1,.62],[.87,.92],[.5,1],[.13,.92]]},
+ bird:{th:'animal',name:'작은 새',a:1.3,hole:[.24,.22],safe:[.3,.38,.78,.86],pts:[
+  [0,.3,1],[.12,.18],[.2,.04],[.35,0],[.46,.12],[.6,.24],[.84,.1],[1,0,1],[.97,.2],[.9,.45],[.86,.72],[.66,.96],[.38,1],[.15,.88],[.08,.6],[.12,.42,1]]},
  /* ---- 사람 ---- */
- chef:{theme:'people',name:'셰프',draw:function(r){
-   var s=C(0,10,22)+P('M-16 -12V-20H16V-12')+P('M-16 -20C-32 -22 -30 -46 -13 -40C-9 -54 9 -54 13 -40C30 -46 32 -22 16 -20');
-   s+=P('M-12 5Q-8 1 -4 5')+P('M4 5Q8 1 12 5');
-   s+=P('M0 14C-6 10 -14 12 -16 18C-12 15 -6 16 0 14C6 16 12 15 16 18C14 12 6 10 0 14Z',F)+P('M-6 23Q0 28 6 23');
-   s+=P('M-30 48Q-28 36 -10 33')+P('M30 48Q28 36 10 33')+P('M-8 33L0 41L8 33');
-   if(r()<.5)s+=L(-42,-10,-42,22)+P('M-46 -10V-2Q-46 2 -42 2Q-38 2 -38 -2V-10')+P('M42 -10Q48 2 42 10V22');
-   return s;}},
- face:{theme:'people',name:'라인 얼굴',draw:function(r){
-   var s=P('M0 -36C-22 -36 -26 -14 -23 4C-20 22 -10 33 0 33C10 33 20 22 23 4C26 -14 22 -36 0 -36Z');
-   if(r()<.6)s+=C(0,-45,8);
-   s+=P('M-23 -4C-24 -30 -4 -34 8 -26C16 -22 22 -14 23 -4','stroke-width="1.3"');
-   s+=P('M-14 -2Q-9 2 -4 -2')+P('M4 -2Q9 2 14 -2')+L(-12,0,-14,3,'stroke-width="1"')+L(12,0,14,3,'stroke-width="1"');
-   s+=P('M1 0L3 11L-1 12','stroke-width="1.4"')+P('M-6 19Q0 16 6 19Q0 24 -6 19Z',F);
-   if(r()<.6)s+=C(-24,10,2.2)+C(24,10,2.2);
-   if(r()<.5){s+='<g transform="translate(30 -24) rotate(30)">'+P('M0 0Q6 -4 12 0Q6 4 0 0Z')+'</g><g transform="translate(-30 -24) rotate(150)">'+P('M0 0Q6 -4 12 0Q6 4 0 0Z')+'</g>';}
-   return s;}},
- family:{theme:'people',name:'우리 가족',draw:function(r){
-   var kids=RI(r,1,2),list=[{h:72}];for(var i=0;i<kids;i++)list.push({h:R(r,40,50)});list.push({h:66});
-   var gap=5,tw=0;list.forEach(function(m){m.w=m.h*.36;tw+=m.w;});tw+=gap*(list.length-1);
-   var x=-tw/2,s='',G=40;
-   list.forEach(function(m){m.x=x+m.w/2;x+=m.w+gap;var rr=m.h*.12;m.cy=G-m.h+rr;m.neck=m.cy+rr+2;m.ay=m.neck+m.h*.2;
-     s+=C(m.x,m.cy,rr)+P('M'+n(m.x-m.w/2)+' '+G+'Q'+n(m.x-m.w/2)+' '+n(m.neck)+' '+n(m.x)+' '+n(m.neck)+'Q'+n(m.x+m.w/2)+' '+n(m.neck)+' '+n(m.x+m.w/2)+' '+G+'Z');});
-   for(var k=0;k<list.length-1;k++){var a=list[k],b=list[k+1],x1=a.x+a.w*.38,x2=b.x-b.w*.38;s+=P('M'+n(x1)+' '+n(a.ay)+'Q'+n((x1+x2)/2)+' '+n(Math.max(a.ay,b.ay)+5)+' '+n(x2)+' '+n(b.ay));}
-   s+=L(-48,G,48,G);
-   if(r()<.7)s+=heart(0,-38,6,F);
-   return s;}},
- couple:{theme:'people',name:'커플',draw:function(r){
-   var s='',G=40,figs=[{x:-15,h:68},{x:15,h:62,bun:true}];
-   figs.forEach(function(m){var rr=m.h*.12,cy=G-m.h+rr,neck=cy+rr+2,w=m.h*.38;m.ay=neck+m.h*.2;m.w=w;
-     s+=C(m.x,cy,rr)+P('M'+n(m.x-w/2)+' '+G+'Q'+n(m.x-w/2)+' '+n(neck)+' '+m.x+' '+n(neck)+'Q'+n(m.x+w/2)+' '+n(neck)+' '+n(m.x+w/2)+' '+G+'Z');
-     if(m.bun)s+=C(m.x+rr*.9,cy-rr*.9,rr*.45);});
-   s+=P('M'+n(-15+figs[0].w*.38)+' '+n(figs[0].ay)+'Q0 '+n(Math.max(figs[0].ay,figs[1].ay)+5)+' '+n(15-figs[1].w*.38)+' '+n(figs[1].ay));
-   s+=heart(0,-36,7,r()<.5?F:'')+L(-44,G,44,G);
-   if(r()<.5)s+=star4(-34,-30,3)+star4(34,-26,3);
-   return s;}},
+ ginger:{th:'people',name:'진저브레드 맨',a:.95,hole:[.5,.12],safe:[.36,.32,.64,.62],pts:[
+  [.5,0],[.63,.03],[.67,.13],[.62,.24,1],[.86,.27],[.99,.32],[.99,.46],[.86,.5],[.69,.49,1],[.72,.66],[.82,.88],[.81,.98],[.68,1],[.58,.89],[.5,.77,1],[.42,.89],[.32,1],[.19,.98],[.18,.88],[.28,.66],[.31,.49,1],[.14,.5],[.01,.46],[.01,.32],[.14,.27],[.38,.24,1],[.33,.13],[.37,.03]]},
+ face:{th:'people',name:'얼굴 (올림머리)',a:.9,hole:[.5,.08],safe:[.2,.42,.8,.86],pts:[
+  [.5,0],[.61,.03],[.63,.11],[.6,.17,1],[.82,.22],[.94,.4],[1,.6],[.88,.86],[.5,1],[.12,.86],[0,.6],[.06,.4],[.18,.22],[.4,.17,1],[.37,.11],[.39,.03]]},
+ bust:{th:'people',name:'사람 상반신',a:1,hole:[.5,.14],safe:[.2,.7,.8,.95],pts:[
+  [0,1,1],[.02,.8],[.1,.67],[.3,.6],[.38,.54,1],[.33,.4],[.33,.18],[.42,.03],[.5,0],[.58,.03],[.67,.18],[.67,.4],[.62,.54,1],[.7,.6],[.9,.67],[.98,.8],[1,1,1]]},
+ hand:{th:'people',name:'손바닥',a:.8,hole:[.53,.87],safe:[.3,.5,.84,.78],pts:[
+  [.28,1,1],[.25,.8],[.15,.67],[.04,.53],[.06,.44],[.15,.45],[.25,.55,1],[.23,.15],[.27,.08],[.35,.08],[.39,.15],[.41,.37,1],[.42,.07],[.46,0],[.54,0],[.58,.07],[.6,.37,1],[.61,.12],[.645,.06],[.715,.06],[.75,.12],[.77,.4,1],[.78,.28],[.81,.22],[.87,.22],[.9,.28],[.92,.55],[.86,.78],[.77,1,1]]},
+ chef:{th:'people',name:'셰프 모자',a:1,hole:[.5,.2],safe:[.2,.36,.8,.68],pts:[
+  [.18,1,1],[.18,.74],[.05,.56],[0,.36],[.1,.19],[.26,.2,1],[.35,.04],[.5,0],[.65,.04],[.74,.2,1],[.9,.19],[1,.36],[.95,.56],[.82,.74],[.82,1,1]]},
+ /* ---- 트렌드 ---- */
+ paddle:{th:'trend',name:'패들 손잡이',a:1.8,gen:function(W,H,r,f){
+   var X=function(v){return n(f?W-v:v);},sw=f?0:1,L=clamp(W*.25,50,130),bw=W-L,hh=Math.min(H*.32,72),hy=(H-hh)/2,rr=Math.min(18,H*.1),q=Math.min(10,hy-rr-1),A=function(rad){return 'A'+n(rad)+' '+n(rad)+' 0 0 '+sw+' ';};
+   var d='M'+X(rr)+' 0H'+X(bw-rr)+A(rr)+X(bw)+' '+n(rr)+'V'+n(hy-q)+'Q'+X(bw)+' '+n(hy)+' '+X(bw+q)+' '+n(hy)+'H'+X(W-hh/2)+A(hh/2)+X(W-hh/2)+' '+n(hy+hh)+'H'+X(bw+q)+'Q'+X(bw)+' '+n(hy+hh)+' '+X(bw)+' '+n(hy+hh+q)+'V'+n(H-rr)+A(rr)+X(bw-rr)+' '+n(H)+'H'+X(rr)+A(rr)+'0 '+n(H-rr)+'V'+n(rr)+A(rr)+X(rr)+' 0Z';
+   var sx=f?[L+bw*.1,L+bw*.9]:[bw*.1,bw*.9];
+   return {d:d,holes:[[f?hh/2:W-hh/2,H/2,Math.min(holeR(W,H),hh*.22)]],safe:[sx[0],H*.15,sx[1],H*.85]};}},
+ round:{th:'trend',name:'원형 손잡이',a:1.5,gen:function(W,H,r,f){
+   var Rr=Math.min(H/2,W*.36),cy=H/2,cx=f?W-Rr:Rr,dy=Math.min(H*.15,35),dx=Math.sqrt(Rr*Rr-dy*dy),xi=f?cx-dx:cx+dx,xe=f?dy:W-dy,s=f?1:0;
+   var d='M'+n(xi)+' '+n(cy-dy)+'A'+n(Rr)+' '+n(Rr)+' 0 1 '+s+' '+n(xi)+' '+n(cy+dy)+'H'+n(xe)+'A'+n(dy)+' '+n(dy)+' 0 0 '+s+' '+n(xe)+' '+n(cy-dy)+'Z';
+   return {d:d,holes:[[xe,cy,Math.min(holeR(W,H),dy*.45)]],safe:[cx-Rr*.62,cy-Rr*.55,cx+Rr*.62,cy+Rr*.55]};}},
+ liveedge:{th:'trend',name:'자연 곡선 (라이브엣지)',a:2,gen:function(W,H,r){
+   var top=[[0,R(r,.02,.07),1]],bot=[],us=[.18,.36,.54,.72,.88],zt=RI(r,0,4),zb=RI(r,0,4);
+   us.forEach(function(u,i){top.push([u+R(r,-.03,.03),i===zt?0:R(r,0,.07)]);});top.push([1,R(r,.02,.07),1],[1,1-R(r,.02,.07),1]);
+   us.slice().reverse().forEach(function(u,i){bot.push([u+R(r,-.03,.03),i===zb?1:1-R(r,0,.07)]);});
+   return {pts:top.concat(bot,[[0,1-R(r,.02,.07),1]]),hole:[.07,.5],safe:[.12,.18,.88,.82]};}},
+ pebble:{th:'trend',name:'조약돌',a:1.6,gen:function(W,H,r){
+   var pts=[],N=12;for(var i=0;i<N;i++){var t=i/N*Math.PI*2,c=Math.cos(t),s=Math.sin(t),k=1+R(r,-.05,.05);
+     pts.push([.5+.5*k*Math.sign(c)*Math.pow(Math.abs(c),.55),.5+.5*k*Math.sign(s)*Math.pow(Math.abs(s),.55)]);}
+   var mnx=Math.min.apply(0,pts.map(function(p){return p[0];})),mxx=Math.max.apply(0,pts.map(function(p){return p[0];})),mny=Math.min.apply(0,pts.map(function(p){return p[1];})),mxy=Math.max.apply(0,pts.map(function(p){return p[1];}));
+   pts=pts.map(function(p){return [(p[0]-mnx)/(mxx-mnx)*.98+.01,(p[1]-mny)/(mxy-mny)*.98+.01];});
+   return {pts:pts,hole:[.1,.5],safe:[.16,.2,.84,.8]};}},
+ tray:{th:'trend',name:'양손잡이 트레이',a:1.7,noflip:1,gen:function(W,H){
+   var t=clamp(H*.09,14,26),sl=H*.42,x=Math.max(t*1.4,W*.06);
+   return {d:rrect(0,0,W,H,Math.min(W,H)*.1),slots:rrect(x-t/2,H/2-sl/2,t,sl,t/2)+rrect(W-x-t/2,H/2-sl/2,t,sl,t/2),holes:[],safe:[x+t*1.5,H*.15,W-x-t*1.5,H*.85]};}},
+ heart:{th:'trend',name:'하트',a:1.1,noflip:1,hole:[.5,.36],safe:[.22,.44,.78,.66],pts:[
+  [.5,.2,1],[.62,.04],[.8,0],[.95,.08],[1,.3],[.92,.56],[.72,.79],[.5,1,1],[.28,.79],[.08,.56],[0,.3],[.05,.08],[.2,0],[.38,.04]]},
  /* ---- 도형 ---- */
- rings:{theme:'shape',name:'동심원',draw:function(r){
-   var cnt=RI(r,5,8),s='',tangent=r()<.4;
-   for(var i=0;i<cnt;i++){var rr=45*(i+1)/cnt;s+=tangent?C(0,45-rr,rr):C(0,0,rr,(r()<.25)?'stroke-dasharray="2 3"':'');}
-   s+=C(0,tangent?45-45/cnt:0,3,F);
-   if(!tangent&&r()<.5)s+=L(-48,0,48,0,'stroke-width="1"')+L(0,-48,0,48,'stroke-width="1"');
-   return s;}},
- triangles:{theme:'shape',name:'삼각 모자이크',draw:function(r){
-   var c=5,sz=16,o=-40,s='';
-   for(var i=0;i<c;i++)for(var j=0;j<c;j++){var x=o+i*sz,y=o+j*sz,dir=r()<.5;
-     var t1=dir?[[x,y],[x+sz,y],[x,y+sz]]:[[x,y],[x+sz,y],[x+sz,y+sz]],t2=dir?[[x+sz,y],[x+sz,y+sz],[x,y+sz]]:[[x,y],[x+sz,y+sz],[x,y+sz]];
-     s+=P(dir?'M'+(x+sz)+' '+y+'L'+x+' '+(y+sz):'M'+x+' '+y+'L'+(x+sz)+' '+(y+sz),'stroke-width="1"');
-     if(r()<.3)s+=P(poly(t1,true),F);else if(r()<.2)s+=P(poly(t2,true),F);}
-   return s+P('M-40 -40H40V40H-40Z');}},
- hex:{theme:'shape',name:'벌집 육각형',draw:function(r){
-   var sz=9.4,s='';
-   for(var q=-2;q<=2;q++)for(var rr=-2;rr<=2;rr++){if(Math.abs(q+rr)>2)continue;
-     var cx=sz*Math.sqrt(3)*(q+rr/2),cy=sz*1.5*rr,pts=[],ins=[];
-     for(var k=0;k<6;k++){var a=Math.PI/180*(60*k-30);pts.push([cx+sz*.92*Math.cos(a),cy+sz*.92*Math.sin(a)]);ins.push([cx+sz*.55*Math.cos(a),cy+sz*.55*Math.sin(a)]);}
-     s+=P(poly(pts,true));var v=r();if(v<.28)s+=P(poly(ins,true),F);else if(v<.45)s+=C(cx,cy,1.6,F);}
-   return s;}},
- memphis:{theme:'shape',name:'멤피스 패턴',draw:function(r){
-   var s='',cell=22;
-   for(var i=0;i<4;i++)for(var j=0;j<4;j++){if(r()<.12)continue;var x=-33+i*cell+R(r,-3,3),y=-33+j*cell+R(r,-3,3),t=RI(r,0,6);
-     if(t===0)s+=C(x,y,6);else if(t===1)s+=C(x,y,3.5,F);else if(t===2)s+=P(poly([[x,y-7],[x+7,y+5],[x-7,y+5]],true));
-     else if(t===3)s+=P('M'+n(x-8)+' '+n(y+3)+'l4 -6l4 6l4 -6l4 6');else if(t===4)s+=P('M'+n(x-8)+' '+n(y)+'q4 -6 8 0t8 0');
-     else if(t===5)s+=L(x-5,y,x+5,y)+L(x,y-5,x,y+5);else s+=P('M'+n(x-7)+' '+n(y+3)+'A7 7 0 0 1 '+n(x+7)+' '+n(y+3)+'Z',F);}
-   return s;}},
- bauhaus:{theme:'shape',name:'바우하우스',draw:function(r){
-   var s='',c=28,o=-42;
-   for(var i=0;i<3;i++)for(var j=0;j<3;j++){var x=o+i*c,y=o+j*c,t=RI(r,0,5),k=RI(r,0,3);
-     var cx=[x,x+c,x+c,x][k],cy=[y,y,y+c,y+c][k];
-     if(t===0){var sx=cx===x?1:-1,sy=cy===y?1:-1;s+=P('M'+cx+' '+cy+'L'+(cx+sx*c)+' '+cy+'A'+c+' '+c+' 0 0 '+((sx*sy>0)?1:0)+' '+cx+' '+(cy+sy*c)+'Z',F);}
-     else if(t===1)s+=C(x+c/2,y+c/2,c*.36);
-     else if(t===2)s+=P('M'+x+' '+(y+c/2)+'A'+c/2+' '+c/2+' 0 0 1 '+(x+c)+' '+(y+c/2)+'Z',F);
-     else if(t===3)s+=P(poly([[x,y],[x+c,y+c],[x,y+c]],true),F);
-     else if(t===4)s+=L(x+5,y+8,x+c-5,y+8)+L(x+5,y+14,x+c-5,y+14)+L(x+5,y+20,x+c-5,y+20);
-     else s+=C(x+c/2,y+c/2,c*.18,F);}
-   return s+P('M-42 -42H42V42H-42Z','stroke-width="1"')+L(-14,-42,-14,42,'stroke-width="1"')+L(14,-42,14,42,'stroke-width="1"')+L(-42,-14,42,-14,'stroke-width="1"')+L(-42,14,42,14,'stroke-width="1"');}},
- sunburst:{theme:'shape',name:'선버스트',draw:function(r){
-   var cnt=RI(r,24,36),s=C(0,0,8,r()<.5?F:'')+C(0,0,46,'stroke-width="1.2"');
-   for(var i=0;i<cnt;i++){var a=i*Math.PI*2/cnt,l2=i%2?R(r,30,36):42;s+=L(Math.cos(a)*13,Math.sin(a)*13,Math.cos(a)*l2,Math.sin(a)*l2);}
-   return s;}}
+ rect:{th:'shape',name:'사각',a:1.5,noflip:1,gen:function(W,H){var hr=holeR(W,H);return {d:rrect(0,0,W,H,Math.min(W,H)*.04+4),holes:[[hr*2.6,H/2]],safe:[W*.12,H*.14,W*.88,H*.86]};}},
+ capsule:{th:'shape',name:'캡슐',a:1.8,noflip:1,gen:function(W,H){var rr=Math.min(W,H)/2;return {d:rrect(0,0,W,H,rr),holes:[[W>=H?rr*.55:W/2,W>=H?H/2:rr*.55]],safe:[W*.2,H*.18,W*.8,H*.82]};}},
+ oval:{th:'shape',name:'타원',a:1.5,noflip:1,gen:function(W,H){var hr=holeR(W,H);return {d:ellipseD(W/2,H/2,W/2,H/2),holes:[[W*.06+hr*1.6,H/2]],safe:[W*.2,H*.2,W*.8,H*.8]};}},
+ hex:{th:'shape',name:'육각형',a:1.6,noflip:1,gen:function(W,H){var c=Math.min(H*.29,W*.3);return {d:roundedPoly([[0,H/2],[c,0],[W-c,0],[W,H/2],[W-c,H],[c,H]],Math.min(W,H)*.05),holes:[[c*.95,H/2]],safe:[c*1.2,H*.15,W-c*1.2,H*.85]};}},
+ oct:{th:'shape',name:'팔각형',a:1.4,noflip:1,gen:function(W,H){var c=Math.min(W,H)*.27,hr=holeR(W,H);return {d:roundedPoly([[c,0],[W-c,0],[W,c],[W,H-c],[W-c,H],[c,H],[0,H-c],[0,c]],Math.min(W,H)*.04),holes:[[hr*2.6,H/2]],safe:[c*.7,H*.15,W-c*.7,H*.85]};}},
+ dog:{th:'animal',name:'강아지',a:1.15,hole:[.5,.2],safe:[.24,.4,.76,.86],pts:[
+  [.5,0],[.7,.03],[.82,.06],[.95,.12],[1,.3],[.98,.55],[.9,.63],[.84,.55,1],[.82,.76],[.7,.95],[.5,1],[.3,.95],[.18,.76],[.16,.55,1],[.1,.63],[.02,.55],[0,.3],[.05,.12],[.18,.06],[.3,.03]]},
+ rabbit:{th:'animal',name:'토끼',a:.9,hole:[.5,.5],safe:[.2,.62,.8,.9],pts:[
+  [.28,.38],[.21,.15],[.25,0],[.37,0],[.42,.15],[.44,.35,1],[.5,.34],[.56,.35,1],[.58,.15],[.63,0],[.75,0],[.79,.15],[.72,.38],[.88,.5],[.97,.7],[.88,.92],[.5,1],[.12,.92],[.03,.7],[.12,.5]]},
+ chicken:{th:'animal',name:'닭',a:1.25,hole:[.21,.25],safe:[.3,.5,.8,.86],pts:[
+  [0,.36,1],[.1,.3],[.12,.14],[.16,.05],[.2,0],[.24,.06],[.28,0],[.32,.08],[.34,.2],[.42,.4],[.6,.42],[.78,.1],[.86,0,1],[.94,.08],[1,.3],[.98,.55],[.86,.82],[.62,.98],[.38,1],[.2,.86],[.12,.6],[.1,.46,1]]},
+ turtle:{th:'animal',name:'거북이',a:1.6,hole:[.5,.3],safe:[.28,.34,.76,.74],pts:[
+  [0,.5],[.04,.36],[.14,.34],[.2,.4,1],[.28,.12],[.5,0],[.72,.12],[.84,.4],[.94,.5],[1,.6,1],[.88,.66],[.86,.8],[.88,1,1],[.74,1,1],[.7,.82],[.32,.82],[.28,1,1],[.14,1,1],[.16,.78],[.14,.64],[.04,.64]]},
+ foot:{th:'people',name:'발바닥',a:.6,hole:[.5,.86],safe:[.22,.42,.8,.74],pts:[
+  [.3,1],[.12,.88],[.1,.6],[.14,.38],[.1,.22],[.14,.08],[.24,0],[.34,.04],[.4,.12,1],[.46,.04],[.54,.04],[.58,.12,1],[.64,.08],[.72,.1],[.76,.18,1],[.82,.17],[.88,.24],[.88,.36],[.84,.5],[.82,.7],[.7,.92],[.5,1]]},
+ pigtail:{th:'people',name:'양갈래 소녀',a:1.3,hole:[.5,.2],safe:[.26,.42,.74,.82],pts:[
+  [.5,.04],[.7,.1],[.8,.22],[.86,.28,1],[.94,.24],[1,.36],[.98,.52],[.9,.56],[.84,.52,1],[.8,.78],[.5,1],[.2,.78],[.16,.52,1],[.1,.56],[.02,.52],[0,.36],[.06,.24],[.14,.28,1],[.2,.22],[.3,.1]]},
+ toast:{th:'trend',name:'식빵',a:1,noflip:1,hole:[.5,.17],safe:[.16,.36,.84,.86],pts:[
+  [.06,1,1],[.06,.42],[0,.26],[.04,.08],[.2,0],[.5,.02],[.8,0],[.96,.08],[1,.26],[.94,.42],[.94,1,1]]},
+ arch:{th:'shape',name:'아치',a:1.2,noflip:1,gen:function(W,H){var ry=Math.min(H*.5,W*.5),rr=Math.min(W,H)*.03+3;
+   return {d:'M0 '+n(H-rr)+'V'+n(ry)+'A'+n(W/2)+' '+n(ry)+' 0 0 1 '+n(W)+' '+n(ry)+'V'+n(H-rr)+'Q'+n(W)+' '+n(H)+' '+n(W-rr)+' '+n(H)+'H'+n(rr)+'Q0 '+n(H)+' 0 '+n(H-rr)+'Z',holes:[[W/2,ry*.45]],safe:[W*.15,ry*.8,W*.85,H*.88]};}},
+ teardrop:{th:'shape',name:'물방울',a:1.6,hole:[.14,.5],safe:[.2,.22,.7,.78],pts:[[0,.5],[.08,.14],[.32,0],[.58,.08],[1,.5,1],[.58,.92],[.32,1],[.08,.86]]},
+ diamond:{th:'shape',name:'마름모',a:1.6,noflip:1,gen:function(W,H){return {d:roundedPoly([[0,H/2],[W/2,0],[W,H/2],[W/2,H]],Math.min(W,H)*.1),holes:[[W*.16,H/2]],safe:[W*.3,H*.3,W*.7,H*.7]};}},
+ tri:{th:'shape',name:'둥근 삼각',a:1.15,noflip:1,gen:function(W,H){return {d:roundedPoly([[0,H],[W/2,0],[W,H]],Math.min(W,H)*.16),holes:[[W/2,H*.3]],safe:[W*.3,H*.55,W*.7,H*.88]};}},
+ apple:{th:'food',name:'사과',a:1,hole:[.5,.3],safe:[.2,.42,.8,.8],pts:[
+  [.47,.15,1],[.46,.02],[.53,0],[.55,.13,1],[.64,.06],[.8,.06],[.96,.2],[1,.45],[.92,.75],[.76,.96],[.62,1],[.5,.95,1],[.38,1],[.24,.96],[.08,.75],[0,.45],[.04,.2],[.2,.06],[.36,.06]]},
+ pear:{th:'food',name:'배',a:.75,hole:[.5,.12],safe:[.2,.55,.8,.88],pts:[
+  [.5,0],[.6,.04],[.63,.2],[.7,.4],[.86,.56],[.92,.75],[.82,.94],[.5,1],[.18,.94],[.08,.75],[.14,.56],[.3,.4],[.37,.2],[.4,.04]]},
+ lemon:{th:'food',name:'레몬',a:1.5,hole:[.2,.5],safe:[.28,.22,.74,.78],pts:[
+  [0,.5,1],[.08,.36],[.2,.1],[.5,0],[.8,.1],[.92,.36],[1,.5,1],[.92,.64],[.8,.9],[.5,1],[.2,.9],[.08,.64]]},
+ strawberry:{th:'food',name:'딸기',a:1,noflip:1,hole:[.5,.3],safe:[.22,.4,.78,.64],pts:[
+  [0,.25],[.1,.08],[.2,.14,1],[.3,0],[.4,.1,1],[.5,0],[.6,.1,1],[.7,0],[.8,.14,1],[.9,.08],[1,.25],[.95,.55],[.75,.85],[.5,1],[.25,.85],[.05,.55]]},
+ melon:{th:'food',name:'수박 조각',a:2,noflip:1,gen:function(W,H){var rr=Math.min(W,H)*.04+3;return {d:'M'+n(rr)+' 0H'+n(W-rr)+'Q'+n(W)+' 0 '+n(W)+' '+n(rr)+'A'+n(W/2)+' '+n(H-rr)+' 0 0 1 0 '+n(rr)+'Q0 0 '+n(rr)+' 0Z',holes:[[W/2,H*.2]],safe:[W*.25,H*.32,W*.75,H*.62]};}},
+ mushroom:{th:'food',name:'버섯',a:1.1,noflip:1,hole:[.5,.25],safe:[.2,.3,.8,.5],pts:[
+  [0,.5],[.06,.2],[.3,.02],[.5,0],[.7,.02],[.94,.2],[1,.5],[.9,.58],[.66,.58,1],[.68,.86],[.62,1],[.38,1],[.32,.86],[.34,.58,1],[.1,.58]]},
+ leaf:{th:'nature',name:'나뭇잎',a:2,hole:[.78,.5],safe:[.18,.28,.68,.72],pts:[
+  [0,.5,1],[.12,.22],[.35,.04],[.6,0],[.8,.1],[.88,.36],[.9,.46,1],[1,.44],[1,.56],[.9,.54,1],[.88,.64],[.8,.9],[.6,1],[.35,.96],[.12,.78]]},
+ cloud:{th:'nature',name:'구름',a:1.6,hole:[.42,.28],safe:[.15,.5,.85,.88],pts:[
+  [0,.75],[.04,.5],[.18,.42],[.22,.2],[.38,.06],[.55,.04],[.68,.18],[.8,.16],[.94,.3],[.96,.48],[1,.7],[.94,.96],[.8,1],[.2,1],[.04,.94]]},
+ mountain:{th:'nature',name:'산',a:1.8,hole:[.48,.22],safe:[.2,.55,.8,.9],pts:[
+  [0,1,1],[0,.6],[.18,.3],[.28,.42],[.48,0],[.62,.3],[.72,.22],[1,.62],[1,1,1]]},
+ moon:{th:'nature',name:'초승달',a:.85,hole:[.14,.5],safe:[.12,.3,.36,.7],pts:[
+  [.62,0,1],[.3,.06],[.06,.3],[0,.55],[.12,.84],[.4,1],[.72,.98],[.96,.8,1],[.66,.78],[.44,.62],[.38,.38],[.46,.16]]},
+ star:{th:'nature',name:'별',a:1.05,noflip:1,gen:function(W,H){var p=[];for(var i=0;i<10;i++){var t=-Math.PI/2+i*Math.PI/5,k=i%2?.48:1;p.push([Math.cos(t)*k,Math.sin(t)*k]);}
+   var xs=p.map(function(q){return q[0];}),ys=p.map(function(q){return q[1];}),mx=Math.min.apply(0,xs),Mx=Math.max.apply(0,xs),my=Math.min.apply(0,ys),My=Math.max.apply(0,ys);
+   p=p.map(function(q){return [(q[0]-mx)/(Mx-mx)*W,(q[1]-my)/(My-my)*H];});
+   return {d:roundedPoly(p,Math.min(W,H)*.05),holes:[[W/2,H*.48]],safe:[W*.3,H*.56,W*.7,H*.68]};}},
+ tree:{th:'nature',name:'나무',a:.8,noflip:1,hole:[.5,.2],safe:[.3,.62,.7,.8],pts:[
+  [.5,0],[.72,.3],[.62,.3,1],[.84,.58],[.72,.58,1],[1,.86],[.6,.86,1],[.6,1,1],[.4,1,1],[.4,.86,1],[0,.86],[.28,.58,1],[.16,.58],[.38,.3,1],[.28,.3]]}
 };
 var THEMES=[
- {id:'trend',name:'트렌드',desc:'라인아트·보태니컬·레터링',icon:'botanical'},
- {id:'animal',name:'동물',desc:'고양이·고래·곰 일러스트',icon:'cat'},
- {id:'people',name:'사람',desc:'셰프·가족·커플 이야기',icon:'family'},
- {id:'shape',name:'도형',desc:'원·삼각·육각 기하 패턴',icon:'hex'}
+ {id:'trend',name:'트렌드',desc:'패들·라이브엣지·하트·식빵',icon:'paddle'},
+ {id:'animal',name:'동물',desc:'고래·돼지·강아지·거북이',icon:'whale'},
+ {id:'people',name:'사람',desc:'진저브레드·손바닥·얼굴',icon:'ginger'},
+ {id:'shape',name:'도형',desc:'사각·캡슐·육각·아치',icon:'hex'},
+ {id:'food',name:'과일·채소',desc:'사과·레몬·딸기·버섯',icon:'apple'},
+ {id:'nature',name:'자연',desc:'나뭇잎·구름·산·별',icon:'leaf'}
 ];
-function motifsOf(theme){return Object.keys(MOTIFS).filter(function(k){return MOTIFS[k].theme===theme;});}
+function shapesOf(theme){return Object.keys(SHAPES).filter(function(k){return SHAPES[k].th===theme;});}
+
+/* 모양 만들기: {d(외곽+구멍), W, H, safe, holes} */
+function buildShape(c){
+  var sh=SHAPES[c.shape]||SHAPES.whale,W=c.w,H=c.h,r=mulberry32(c.sseed||1),hr=holeR(W,H),flip=!!c.flip&&!sh.noflip;
+  var src=sh.gen?sh.gen(W,H,r,flip):{pts:sh.pts,hole:sh.hole,safe:sh.safe},d,holes=[],safe,slots=src.slots||'';
+  if(src.pts){
+    var j=sh.gen?0:.008;
+    var P=src.pts.map(function(p){var u=p[0],v=p[1];if(!p[2]&&j){u=clamp(u+R(r,-j,j),0,1);v=clamp(v+R(r,-j,j),0,1);}if(flip)u=1-u;return [u*W,v*H,p[2]];});
+    if(flip)P.reverse();
+    d=curveD(P);
+    if(src.hole)holes.push([(flip?1-src.hole[0]:src.hole[0])*W,src.hole[1]*H,hr]);
+    var s=src.safe;safe=flip?[(1-s[2])*W,s[1]*H,(1-s[0])*W,s[3]*H]:[s[0]*W,s[1]*H,s[2]*W,s[3]*H];
+  } else {d=src.d;holes=(src.holes||[]).map(function(h){return [h[0],h[1],h[2]||hr];});safe=src.safe;}
+  if(!c.hole)holes=[];
+  return {d:d+slots+holes.map(function(h){return circleD(h[0],h[1],h[2]);}).join(''),W:W,H:H,safe:safe,holes:holes,name:sh.name,a:sh.a};
+}
+/* 원판 사용률: 모양을 작은 캔버스에 칠해서 면적 비율을 잰다 */
+var yCache={},yCanvas=null;
+function yieldOf(geo){
+  var key=geo.W+'x'+geo.H+geo.d.length+geo.d.slice(-40)+geo.d.slice(0,40);if(key in yCache)return yCache[key];
+  var v=null;
+  try{var k=240/Math.max(geo.W,geo.H),w=Math.ceil(geo.W*k),h=Math.ceil(geo.H*k);yCanvas=yCanvas||document.createElement('canvas');yCanvas.width=w;yCanvas.height=h;
+    var cx=yCanvas.getContext('2d');cx.setTransform(k,0,0,k,0,0);cx.fillStyle='#000';cx.fill(new Path2D(geo.d),'evenodd');
+    var px=cx.getImageData(0,0,w,h).data,sum=0;for(var i=3;i<px.length;i+=4)sum+=px[i];v=sum/255/(w*h);}catch(e){v=null;}
+  yCache[key]=v;return v;
+}
 
 /* ---------- 나뭇결 ---------- */
 function smooth(pts){var d='M'+n(pts[0][0])+' '+n(pts[0][1]);for(var i=1;i<pts.length-1;i++){var mx=(pts[i][0]+pts[i+1][0])/2,my=(pts[i][1]+pts[i+1][1])/2;d+='Q'+n(pts[i][0])+' '+n(pts[i][1])+' '+n(mx)+' '+n(my);}var l=pts[pts.length-1];return d+'L'+n(l[0])+' '+n(l[1]);}
@@ -604,54 +628,36 @@ function grainSVG(w,W,H,r){
   return out;
 }
 
-/* ---------- 도마 모양 ---------- */
-function geom(shape,W,H){if(shape==='handle'){var Lh=clamp(W*.25,50,130);return {bw:W-Lh,L:Lh};}return {bw:W,L:0};}
-function rrect(x,y,w,h,r){r=Math.min(r,w/2,h/2);var a='A'+n(r)+' '+n(r)+' 0 0 1 ';return 'M'+n(x+r)+' '+n(y)+'H'+n(x+w-r)+a+n(x+w)+' '+n(y+r)+'V'+n(y+h-r)+a+n(x+w-r)+' '+n(y+h)+'H'+n(x+r)+a+n(x)+' '+n(y+h-r)+'V'+n(y+r)+a+n(x+r)+' '+n(y)+'Z';}
-function ellipseD(cx,cy,rx,ry){return 'M'+n(cx-rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx+rx)+' '+n(cy)+'A'+n(rx)+' '+n(ry)+' 0 1 0 '+n(cx-rx)+' '+n(cy)+'Z';}
-function cornerR(shape,W,H){return shape==='round'?Math.min(W,H)*.2:shape==='handle'?Math.min(18,H*.1):Math.min(W,H)*.03+4;}
-function shapePath(shape,W,H){
-  if(shape==='oval')return ellipseD(W/2,H/2,W/2,H/2);
-  if(shape!=='handle')return rrect(0,0,W,H,cornerR(shape,W,H));
-  var g=geom(shape,W,H),bw=g.bw,hh=Math.min(H*.3,70),hy=(H-hh)/2,r=cornerR(shape,W,H),f=Math.min(10,hy-r-1),a='A'+n(r)+' '+n(r)+' 0 0 1 ';
-  var d='M'+n(r)+' 0H'+n(bw-r)+a+n(bw)+' '+n(r)+'V'+n(hy-f)+'Q'+n(bw)+' '+n(hy)+' '+n(bw+f)+' '+n(hy)+'H'+n(W-hh/2)+'A'+n(hh/2)+' '+n(hh/2)+' 0 0 1 '+n(W-hh/2)+' '+n(hy+hh)+'H'+n(bw+f)+'Q'+n(bw)+' '+n(hy+hh)+' '+n(bw)+' '+n(hy+hh+f)+'V'+n(H-r)+a+n(bw-r)+' '+n(H)+'H'+n(r)+a+'0 '+n(H-r)+'V'+n(r)+a+n(r)+' 0Z';
-  var hr=hh*.2,hx=W-hh/2,hc=H/2;
-  return d+'M'+n(hx-hr)+' '+n(hc)+'A'+n(hr)+' '+n(hr)+' 0 1 0 '+n(hx+hr)+' '+n(hc)+'A'+n(hr)+' '+n(hr)+' 0 1 0 '+n(hx-hr)+' '+n(hc)+'Z';
-}
-function insetPath(shape,W,H,m){if(shape==='oval')return ellipseD(W/2,H/2,W/2-m,H/2-m);var bw=geom(shape,W,H).bw;return rrect(m,m,bw-2*m,H-2*m,Math.max(2,cornerR(shape,W,H)-m*.6));}
 
-/* ---------- 각인 ---------- */
+/* ---------- 문구 각인 ---------- */
 function textEm(t){var e=0;for(var i=0;i<t.length;i++)e+=t.charCodeAt(i)>0x2e80?1:.6;return e;}
-function engraving(cfg,color){
-  var W=cfg.w,H=cfg.h,bw=geom(cfg.shape,W,H).bw,size=Math.min(bw,H)*cfg.scale,out='';
-  if(cfg.shape==='oval')size*=.85;
-  var cx=bw/2,cy=H/2,txt=(cfg.text||'').trim();
-  if(cfg.border){var m=Math.max(8,Math.min(bw,H)*.05);out+='<path d="'+insetPath(cfg.shape,W,H,m)+'" fill="none" stroke="currentColor" stroke-width="'+n(Math.max(.8,Math.min(bw,H)*.006))+'"/>';}
-  var ms=size,my=cy;
-  if(txt){ms=size*.8;var fs=Math.min(size*.13,bw*.78/Math.max(2.5,textEm(txt)));var block=ms+fs*1.5;my=cy-block/2+ms/2;
-    out+='<text x="'+n(cx)+'" y="'+n(my+ms/2+fs*1.2)+'" text-anchor="middle" font-size="'+n(fs)+'" font-family="'+FONTS[cfg.font].replace(/"/g,'')+'" font-weight="700" fill="currentColor">'+esc(txt)+'</text>';}
-  var mo=MOTIFS[cfg.motif]||MOTIFS.botanical;
-  out+='<g class="eng" transform="translate('+n(cx)+' '+n(my)+') scale('+n(ms/100,4)+')" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+mo.draw(mulberry32(cfg.mseed))+'</g>';
-  return '<g color="'+color+'">'+out+'</g>';
+function engraving(c,geo,color){
+  var txt=(c.text||'').trim();if(!txt)return '';
+  var s=geo.safe,sw=s[2]-s[0],sh=s[3]-s[1],fs=Math.min(sh*.32,sw*.86/Math.max(2.5,textEm(txt)));
+  return '<text x="'+n((s[0]+s[2])/2)+'" y="'+n((s[1]+s[3])/2+fs*.35)+'" text-anchor="middle" font-size="'+n(fs)+'" font-family="'+FONTS[c.font].replace(/"/g,'')+'" font-weight="700" fill="'+color+'">'+esc(txt)+'</text>';
 }
 
 /* ---------- 도마 그리기 ---------- */
 var DIM_C='#5b4c3f',MONO="'IBM Plex Mono',Consolas,monospace",SANS="'IBM Plex Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif";
-function renderBoard(cfg,opt){
-  opt=opt||{};var W=cfg.w,H=cfg.h,T=cfg.t,w=WOOD[cfg.wood],id=opt.uid||uid(),dims=!!opt.dims,M=Math.max(W,H);
+function renderBoard(c,opt){
+  opt=opt||{};var geo=buildShape(c),W=geo.W,H=geo.H,T=c.t,w=WOOD[c.wood],id=opt.uid||uid(),dims=!!opt.dims,M=Math.max(W,H);
   var e=clamp(T*.7,6,30),m=dims?M*.12:M*.05,gap=dims?M*.1:0,vbW=W+2*m,vbH=m+H+e+(dims?gap+T+m*.6:m*.8);
-  var d=shapePath(cfg.shape,W,H),gr=mulberry32(cfg.gseed*31+hashStr(cfg.wood));
+  var d=geo.d,gr=mulberry32(c.gseed*31+hashStr(c.wood)),hs=n(M*.022);
   var s='<defs><clipPath id="'+id+'c"><path d="'+d+'" clip-rule="evenodd"/></clipPath>'+
    '<linearGradient id="'+id+'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shade(w.base,.1)+'"/><stop offset=".55" stop-color="'+w.base+'"/><stop offset="1" stop-color="'+shade(w.base,-.1)+'"/></linearGradient>'+
    '<linearGradient id="'+id+'s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>'+
+   '<pattern id="'+id+'p" width="'+hs+'" height="'+hs+'" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="'+hs+'" height="'+hs+'" fill="#f3eee6"/><line x1="0" y1="0" x2="0" y2="'+hs+'" stroke="#c9bba6" stroke-width="'+n(hs*.18)+'"/></pattern>'+
    '<filter id="'+id+'f" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation="'+n(M*.0006+.1)+'"/></filter>'+
    '<filter id="'+id+'h" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="'+n(M*.02)+'"/></filter></defs>';
   s+='<g transform="translate('+n(m)+' '+n(m)+')">';
-  s+='<ellipse cx="'+n(W/2)+'" cy="'+n(H+e*.8)+'" rx="'+n(W*.47)+'" ry="'+n(Math.max(6,H*.05))+'" fill="#000" opacity=".25" filter="url(#'+id+'h)"/>';
+  if(opt.stock!==false)s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="url(#'+id+'p)" stroke="#a8977f" stroke-width="'+n(M*.002+.2)+'" stroke-dasharray="'+n(M*.012)+' '+n(M*.008)+'"/>';
+  s+='<ellipse cx="'+n(W/2)+'" cy="'+n(H+e*.8)+'" rx="'+n(W*.45)+'" ry="'+n(Math.max(6,H*.04))+'" fill="#000" opacity=".2" filter="url(#'+id+'h)"/>';
   var steps=Math.max(2,Math.round(e/3));
   for(var k=steps;k>=1;k--)s+='<path d="'+d+'" fill-rule="evenodd" transform="translate(0 '+n(e*k/steps)+')" fill="'+(k===steps?shade(w.base,-.4):shade(w.base,-.28))+'"/>';
   s+='<g clip-path="url(#'+id+'c)"><rect x="-2" y="-2" width="'+(W+4)+'" height="'+(H+4)+'" fill="url(#'+id+'g)"/>'+grainSVG(w,W,H,gr)+'<rect x="-2" y="-2" width="'+(W+4)+'" height="'+(H+4)+'" fill="url(#'+id+'s)"/></g>';
-  s+='<path d="'+d+'" fill="none" fill-rule="evenodd" stroke="'+shade(w.base,-.4)+'" stroke-opacity=".55" stroke-width="'+n(M*.002+.3)+'"/>';
-  s+='<g filter="url(#'+id+'f)" opacity=".9">'+engraving(cfg,w.burn)+'</g>';
+  s+='<path d="'+d+'" fill="none" stroke="'+shade(w.base,-.45)+'" stroke-opacity=".6" stroke-width="'+n(M*.002+.3)+'"/>';
+  if(opt.cutline)s+='<path class="cutline" pathLength="1" d="'+d+'" fill="none" stroke="#ff5a14" stroke-width="'+n(M*.006)+'" stroke-linejoin="round"/>';
+  var tx=engraving(c,geo,w.burn);if(tx)s+='<g filter="url(#'+id+'f)" opacity=".9">'+tx+'</g>';
   if(dims){
     var fs=M*.03,sw=n(M*.0018+.2),yt=-m*.42,xl=-m*.42,tk=fs*.4;
     s+='<g stroke="'+DIM_C+'" stroke-width="'+sw+'" fill="none">'+L(0,yt,W,yt)+L(0,yt-tk,0,yt+tk)+L(W,yt-tk,W,yt+tk)+L(xl,0,xl,H)+L(xl-tk,0,xl+tk,0)+L(xl-tk,H,xl+tk,H)+'</g>';
@@ -664,49 +670,49 @@ function renderBoard(cfg,opt){
     var xr=W+m*.3;s+='<g stroke="'+DIM_C+'" stroke-width="'+sw+'">'+L(xr,y0,xr,y0+T)+L(xr-tk,y0,xr+tk,y0)+L(xr-tk,y0+T,xr+tk,y0+T)+'</g>';
   }
   s+='</g>';
-  return {inner:s,vbW:vbW,vbH:vbH};
+  return {inner:s,vbW:vbW,vbH:vbH,geo:geo};
 }
-function boardSVG(cfg,opt){var b=renderBoard(cfg,opt);var px=opt&&opt.px;return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+n(b.vbW)+' '+n(b.vbH)+'"'+(px?' width="'+px+'" height="'+Math.round(px*b.vbH/b.vbW)+'"':'')+' role="img" aria-label="도마 디자인 시안">'+b.inner+'</svg>';}
+function boardSVG(c,opt){var b=renderBoard(c,opt);var px=opt&&opt.px;return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+n(b.vbW)+' '+n(b.vbH)+'"'+(px?' width="'+px+'" height="'+Math.round(px*b.vbH/b.vbW)+'"':'')+' role="img" aria-label="도마 모양 시안">'+b.inner+'</svg>';}
 
+var OIL_TIP={zelkova:"느티나무는 결이 촘촘해 오일이 천천히 스며요. 얇게 여러 번 바르면 무늬가 선명해져요.",pine:"송판은 무르고 오일을 많이 먹어요. 첫날은 2~3번 연달아 발라 주세요. 송진이 배어 나오는 곳은 닦아 내고 발라요.",walnut:"월넛은 오일을 바르면 색이 한층 짙고 깊어져요. 미네랄 오일과 밀랍 마무리가 잘 어울려요.",maple:"메이플은 밝은 색이라 텅오일·아마인유는 노랗게 변할 수 있어요. 색을 지키려면 미네랄 오일을 쓰세요.",teak:"티크는 원래 오일이 많아 잘 안 먹어요. 얇게 1~2번 바르고 충분히 닦아 내면 돼요.",olive:"올리브는 오일이 많고 촘촘해서 조금만 발라도 돼요. 얇게 바르고 바로 닦아 주세요.",hinoki:"편백은 향이 좋아 향이 강한 오일은 피하세요. 무른 편이라 첫 마감은 3번 이상 해 주세요.",ginkgo:"은행나무는 오일이 고르게 잘 스며요. 기본 순서대로 3~4번이면 충분해요.",camphor:"캄포는 향과 붉은 무늬가 오일을 바르면 더 살아나요. 기본 순서대로 해 주세요.",acacia:"아카시아 집성판은 이음매로 물이 들지 않게 옆면과 끝면을 특히 꼼꼼히 발라 주세요.",rubber:"고무나무는 오일을 꽤 먹어요. 첫 마감은 3~4번 충분히 해 주세요. 집성 이음매도 꼼꼼히 발라요."};
 /* ---------- 상태 ---------- */
-var S={w:380,h:250,t:25,shape:'round',wood:'zelkova',theme:'trend',text:'',font:'serif',scale:.6,border:false,gseed:7,variants:[],sel:0};
-function newVariants(){var r=mulberry32((Math.random()*1e9)|0),list=motifsOf(S.theme).slice();
-  for(var i=list.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=list[i];list[i]=list[j];list[j]=t;}
-  S.variants=list.slice(0,4).map(function(k){return {motif:k,mseed:(r()*1e9)|0};});S.sel=0;}
-function cfg(v){v=v||S.variants[S.sel];return {w:S.w,h:S.h,t:S.t,shape:S.shape,wood:S.wood,text:S.text,font:S.font,scale:S.scale,border:S.border,gseed:S.gseed,motif:v.motif,mseed:v.mseed};}
+var S={w:380,h:250,t:25,wood:'zelkova',theme:'animal',shape:'whale',sseed:5,flip:false,text:'',font:'serif',hole:true,gseed:7};
+function cfg(){return {w:S.w,h:S.h,t:S.t,wood:S.wood,text:S.text,font:S.font,hole:S.hole,gseed:S.gseed,shape:S.shape,sseed:S.sseed,flip:S.flip};}
+function rankShapes(){return shapesOf(S.theme).map(function(k){var g=buildShape({shape:k,w:S.w,h:S.h,sseed:5,hole:S.hole});return {k:k,g:g,y:yieldOf(g)};}).sort(function(a,b){return (b.y||0)-(a.y||0);});}
+function pct(v){return v==null?'-':Math.round(v*100)+'%';}
 
 /* ---------- 화면 ---------- */
 var $=function(id){return document.getElementById(id);};
-function shapeIcon(id){var d=shapePath(id,60,40);return '<svg viewBox="-2 -2 64 44" aria-hidden="true"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="3" fill-rule="evenodd"/></svg>';}
 function swatch(w){var r=mulberry32(hashStr(w.id)),gid='sw'+w.id;return '<svg viewBox="0 0 120 54" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+shade(w.base,.08)+'"/><stop offset="1" stop-color="'+shade(w.base,-.08)+'"/></linearGradient></defs><rect width="120" height="54" fill="url(#'+gid+')"/>'+grainSVG(w,120,54,r)+'</svg>';}
 function dots(v){var s='';for(var i=1;i<=5;i++)s+=i<=v?'●':'<i>●</i>';return '<span class="dots" aria-label="5점 중 '+v+'점">'+s+'</span>';}
+function silhouette(key){var sh=SHAPES[key],W=100*Math.min(1,sh.a),H=W/sh.a,g=buildShape({shape:key,w:W,h:H,sseed:3,hole:true});
+  return '<svg viewBox="-4 -4 '+n(W+8)+' '+n(H+8)+'" aria-hidden="true"><path d="'+g.d+'" fill="currentColor" fill-rule="evenodd"/></svg>';}
 
 function buildControls(){
   $('sizeChips').innerHTML=SIZES.map(function(z){return '<button type="button" class="chip" data-size="'+z.id+'"><b>'+z.label+'</b><small>'+z.w+'×'+z.h+'</small></button>';}).join('');
   $('thickChips').innerHTML=THICK.map(function(t){return '<button type="button" class="chip" data-t="'+t+'"><b class="mono">'+t+'mm</b></button>';}).join('');
-  $('shapeChips').innerHTML=SHAPES.map(function(z){return '<button type="button" class="chip shape" data-shape="'+z.id+'">'+shapeIcon(z.id)+'<b>'+z.label+'</b></button>';}).join('');
   $('woodGrid').innerHTML=WOODS.map(function(w){return '<button type="button" class="wood" data-wood="'+w.id+'">'+swatch(w)+'<div><b>'+w.name+'</b><small>'+w.short+'</small></div></button>';}).join('');
-  $('themeGrid').innerHTML=THEMES.map(function(t){return '<button type="button" class="theme" data-theme-id="'+t.id+'"><svg viewBox="-50 -50 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'+MOTIFS[t.icon].draw(mulberry32(11))+'</g></svg><b>'+t.name+'</b><small>'+t.desc+'</small></button>';}).join('');
+  $('themeGrid').innerHTML=THEMES.map(function(t){return '<button type="button" class="theme" data-theme-id="'+t.id+'">'+silhouette(t.icon)+'<b>'+t.name+'</b><small>'+t.desc+'</small></button>';}).join('');
   document.addEventListener('click',function(ev){
     var b=ev.target.closest('button');if(!b)return;
     if(b.dataset.size){var z=SIZES.filter(function(x){return x.id===b.dataset.size;})[0];S.w=z.w;S.h=z.h;update();}
     else if(b.dataset.t){S.t=+b.dataset.t;update();}
-    else if(b.dataset.shape){S.shape=b.dataset.shape;update();}
     else if(b.dataset.wood){S.wood=b.dataset.wood;update();}
-    else if(b.dataset.themeId){if(S.theme!==b.dataset.themeId){S.theme=b.dataset.themeId;newVariants();}update();}
-    else if(b.dataset.v!=null){S.sel=+b.dataset.v;update(true);}
+    else if(b.dataset.themeId){if(S.theme!==b.dataset.themeId){S.theme=b.dataset.themeId;S.shape=rankShapes()[0].k;S.flip=false;}update();}
+    else if(b.dataset.shapeId){S.shape=b.dataset.shapeId;S.flip=false;update();}
+    else if(b.id==='btnRatio'){var a=SHAPES[S.shape].a,area=S.w*S.h,nw=Math.sqrt(area*a);S.w=clamp(Math.round(nw/5)*5,150,800);S.h=clamp(Math.round(S.w/a/5)*5,100,600);update();}
   });
   var num=function(id,key,min,max){$(id).addEventListener('change',function(){var v=parseInt(this.value,10);if(isNaN(v))v=S[key];S[key]=clamp(v,min,max);update();});};
   num('inW','w',150,800);num('inH','h',100,600);num('inT','t',10,60);
-  var tmr;$('inText').addEventListener('input',function(){S.text=this.value;clearTimeout(tmr);tmr=setTimeout(function(){update(true);},150);});
-  $('inFont').addEventListener('change',function(){S.font=this.value;update(true);});
-  $('inScale').addEventListener('input',function(){S.scale=this.value/100;update(true);});
-  $('inBorder').addEventListener('change',function(){S.border=this.checked;update(true);});
-  $('btnNew').addEventListener('click',function(){newVariants();update();});
+  var tmr;$('inText').addEventListener('input',function(){S.text=this.value;clearTimeout(tmr);tmr=setTimeout(update,150);});
+  $('inFont').addEventListener('change',function(){S.font=this.value;update();});
+  $('inHole').addEventListener('change',function(){S.hole=this.checked;update();});
+  $('btnNew').addEventListener('click',function(){S.sseed=(Math.random()*1e9)|0;update();});
+  $('btnFlip').addEventListener('click',function(){S.flip=!S.flip;update();});
   $('btnGrain').addEventListener('click',function(){S.gseed=(Math.random()*1e6)|0;update();});
   $('dlSheet').addEventListener('click',downloadSheet);
   $('dlSvg').addEventListener('click',function(){saveFile(fileBase()+'.svg',new Blob([boardSVG(cfg(),{dims:true,uid:'x'})],{type:'image/svg+xml'}));});
-  $('dlLaser').addEventListener('click',function(){saveFile(fileBase()+'_laser.svg',new Blob([laserSVG(cfg())],{type:'image/svg+xml'}));});
+  $('dlLaser').addEventListener('click',function(){saveFile(fileBase()+'_재단도면.svg',new Blob([laserSVG(cfg())],{type:'image/svg+xml'}));});
 }
 function press(sel,fn){document.querySelectorAll(sel).forEach(function(el){el.setAttribute('aria-pressed',fn(el)?'true':'false');});}
 function sizeTip(){
@@ -717,31 +723,32 @@ function sizeTip(){
   if(S.t<20&&S.w>=450){tips.push('큰 도마는 휘지 않도록 25mm 이상을 추천해요.');warn=true;}
   $('sizeTip').textContent=tips.join(' ');$('sizeTip').className='tip'+(warn?' warn':'');
 }
-function update(previewOnly){
-  if(!previewOnly){
-    $('inW').value=S.w;$('inH').value=S.h;$('inT').value=S.t;
-    press('[data-size]',function(el){var z=SIZES.filter(function(x){return x.id===el.dataset.size;})[0];return z.w===S.w&&z.h===S.h;});
-    press('[data-t]',function(el){return +el.dataset.t===S.t;});
-    press('[data-shape]',function(el){return el.dataset.shape===S.shape;});
-    press('[data-wood]',function(el){return el.dataset.wood===S.wood;});
-    press('[data-theme-id]',function(el){return el.dataset.themeId===S.theme;});
-    var w=WOOD[S.wood];
-    $('woodDetail').innerHTML='<div><h3>'+w.name+'<span>'+w.en+'</span></h3><p>'+w.desc+'</p></div><div class="ratings"><div>단단함 '+dots(w.hard)+'</div><div>물에 강함 '+dots(w.water)+'</div><div>가격대 '+dots(w.price)+'</div></div>';
-    sizeTip();
-    $('variants').innerHTML=S.variants.map(function(v,i){return '<button type="button" class="variant" data-v="'+i+'" aria-label="시안 '+(i+1)+' '+MOTIFS[v.motif].name+'">'+boardSVG(cfg(v),{uid:'v'+i})+'<span>시안 '+(i+1)+' · '+MOTIFS[v.motif].name+'</span></button>';}).join('');
-  } else {
-    S.variants.forEach(function(v,i){var b=document.querySelector('[data-v="'+i+'"]');if(b)b.firstElementChild.outerHTML=boardSVG(cfg(v),{uid:'v'+i});});
-  }
-  press('[data-v]',function(el){return +el.dataset.v===S.sel;});
-  $('scaleVal').textContent=Math.round(S.scale*100)+'%';
-  $('stage').innerHTML=boardSVG(cfg(),{dims:true,uid:'main'});
-  var c=cfg(),th=THEMES.filter(function(t){return t.id===S.theme;})[0];
-  $('spec').innerHTML=[['나무',WOOD[S.wood].name],['크기',S.w+'×'+S.h+'mm'],['두께',S.t+'mm'],['테마',th.name+' · '+MOTIFS[c.motif].name]].map(function(p){return '<div><dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd></div>';}).join('');
+function update(){
+  $('inW').value=S.w;$('inH').value=S.h;$('inT').value=S.t;
+  press('[data-size]',function(el){var z=SIZES.filter(function(x){return x.id===el.dataset.size;})[0];return z.w===S.w&&z.h===S.h;});
+  press('[data-t]',function(el){return +el.dataset.t===S.t;});
+  press('[data-wood]',function(el){return el.dataset.wood===S.wood;});
+  press('[data-theme-id]',function(el){return el.dataset.themeId===S.theme;});
+  var w=WOOD[S.wood];
+  $('woodDetail').innerHTML='<div><h3>'+w.name+'<span>'+w.en+'</span></h3><p>'+w.desc+'</p></div><div class="ratings"><div>단단함 '+dots(w.hard)+'</div><div>물에 강함 '+dots(w.water)+'</div><div>가격대 '+dots(w.price)+'</div></div>';
+  sizeTip();
+  $('oilTip').textContent=w.name+' 팁: '+OIL_TIP[w.id];
+  var th0=THEMES.filter(function(t){return t.id===S.theme;})[0],ranked=rankShapes();
+  $('shapeLabel').textContent=th0.name+' 디자인 시안 '+ranked.length+'가지';
+  $('shapeGrid').innerHTML=ranked.map(function(o){
+    return '<button type="button" class="shape-card" data-shape-id="'+o.k+'" aria-pressed="'+(o.k===S.shape)+'"><svg viewBox="'+n(-S.w*.04)+' '+n(-S.h*.04)+' '+n(S.w*1.08)+' '+n(S.h*1.08)+'" aria-hidden="true"><path d="'+o.g.d+'" fill="currentColor" fill-rule="evenodd"/></svg><b>'+o.g.name+'</b><small>사용률 '+pct(o.y)+'</small></button>';}).join('');
+  var c=cfg(),main=renderBoard(c,{dims:true,uid:'main'}),y=yieldOf(main.geo),sh=SHAPES[c.shape];
+  $('stage').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+n(main.vbW)+' '+n(main.vbH)+'" role="img" aria-label="'+esc(main.geo.name)+' 도마 시안">'+main.inner+'</svg>';
+  $('btnFlip').hidden=!!sh.noflip;
+  var ratio=(S.w/S.h)/sh.a,ratioTip=(ratio>1.4||ratio<1/1.4)?'<p class="tip warn">'+esc(sh.name)+' 모양은 가로:세로가 '+sh.a+':1 정도일 때 가장 자연스러워요. 지금은 '+n(S.w/S.h,2)+':1이라 '+(ratio>1?'옆으로 늘어나 보여요.':'위아래로 늘어나 보여요.')+' <button type="button" class="btn small" id="btnRatio">비율 맞추기</button></p>':'';
+  $('yield').innerHTML=y==null?ratioTip:'<div class="yield-row"><span>원판 사용률 <b class="mono">'+pct(y)+'</b></span><span class="note">빗금 = 잘려 나가는 자투리 '+pct(1-y)+'</span></div><div class="bar" role="img" aria-label="원판 사용률 '+pct(y)+'"><i style="width:'+pct(y)+'"></i></div>'+ratioTip;
+  var th=THEMES.filter(function(t){return t.id===S.theme;})[0];
+  $('spec').innerHTML=[['나무',w.name],['원판',S.w+'×'+S.h+'mm'],['두께',S.t+'mm'],['모양',th.name+' · '+main.geo.name]].map(function(p){return '<div><dt>'+p[0]+'</dt><dd>'+esc(p[1])+'</dd></div>';}).join('');
   saveState();
 }
 
 /* ---------- 저장 ---------- */
-function fileBase(){return 'domae_'+S.wood+'_'+S.w+'x'+S.h+'x'+S.t;}
+function fileBase(){return 'dosesang_'+S.shape+'_'+S.w+'x'+S.h+'x'+S.t;}
 var dlP=null;
 function getDL(){if(!(window.claude&&window.claude.use))return Promise.resolve(null);if(!dlP)dlP=Promise.resolve(window.claude.use('downloads')).catch(function(){return null;});return dlP;}
 function toast(msg){var t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){t.hidden=true;},2600);}
@@ -754,18 +761,17 @@ function saveFile(name,blob){
 }
 function wrapText(t,max){var out=[],line='';t.split(' ').forEach(function(w){if(textEm(line+' '+w)>max&&line){out.push(line);line=w;}else line=line?line+' '+w:w;});if(line)out.push(line);return out;}
 function sheetSVG(){
-  var c=cfg(),w=WOOD[S.wood],b=renderBoard(c,{dims:true,uid:'sh'}),th=THEMES.filter(function(t){return t.id===S.theme;})[0],WD=2000,HT=1300;
+  var c=cfg(),w=WOOD[S.wood],b=renderBoard(c,{dims:true,uid:'sh'}),y=yieldOf(b.geo),th=THEMES.filter(function(t){return t.id===S.theme;})[0],WD=2000,HT=1300;
   var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+WD+'" height="'+HT+'" viewBox="0 0 '+WD+' '+HT+'">';
   s+='<rect width="'+WD+'" height="'+HT+'" fill="#f4f1ea"/><rect x="40" y="40" width="1300" height="1220" rx="36" fill="#e8e2d6"/>';
   s+='<svg x="70" y="70" width="1240" height="1160" viewBox="0 0 '+n(b.vbW)+' '+n(b.vbH)+'" preserveAspectRatio="xMidYMid meet">'+b.inner+'</svg>';
-  var x=1400,y=110,T=function(t,yy,sz,col,wt,fam){return '<text x="'+x+'" y="'+yy+'" font-size="'+sz+'" fill="'+(col||'#1d261f')+'" font-weight="'+(wt||400)+'" font-family="'+(fam||SANS)+'">'+esc(t)+'</text>';};
-  s+=T('CUTTING BOARD DESIGN',y,24,'#d9531c',500,MONO)+T('도마 디자인 시안',y+70,58,'#1d261f',700);
-  var rows=[['나무',w.name+' ('+w.en+')'],['크기',S.w+' × '+S.h+' mm'],['두께',S.t+' mm'],['모양',SHAPES.filter(function(z){return z.id===S.shape;})[0].label],['테마',th.name+' · '+MOTIFS[c.motif].name],['각인 문구',S.text.trim()?S.text.trim()+' ('+FONT_LABEL[S.font]+')':'없음'],['테두리',S.border?'있음':'없음'],['만든 날',new Date().toLocaleDateString('ko-KR')]];
-  var yy=y+150;rows.forEach(function(r){s+='<line x1="'+x+'" x2="1940" y1="'+(yy-38)+'" y2="'+(yy-38)+'" stroke="#d3dacb" stroke-width="2"/>'+T(r[0],yy,24,'#5b6a5f')+'<text x="1560" y="'+yy+'" font-size="28" fill="#1d261f" font-weight="700" font-family="'+SANS+'">'+esc(r[1])+'</text>';yy+=72;});
-  yy+=20;s+=T('나무 특징',yy,24,'#5b6a5f');yy+=44;
-  wrapText(w.desc,21).forEach(function(l){s+=T(l,yy,25,'#1d261f');yy+=40;});
-  s+=T('단단함 '+'●'.repeat(w.hard)+'○'.repeat(5-w.hard)+'   물에 강함 '+'●'.repeat(w.water)+'○'.repeat(5-w.water),yy+20,22,'#5b6a5f');
-  s+=T('도마 (Cutting Board) · 실제 원목은 색과 무늬가 조금씩 달라요',1230,20,'#5b6a5f');
+  var x=1400,y0=110,T=function(t,yy,sz,col,wt,fam){return '<text x="'+x+'" y="'+yy+'" font-size="'+sz+'" fill="'+(col||'#1d261f')+'" font-weight="'+(wt||400)+'" font-family="'+(fam||SANS)+'">'+esc(t)+'</text>';};
+  s+=T('석이의 도마세상 · CUTTING BOARD',y0,22,'#d9531c',500,MONO)+T('도마 모양 시안',y0+70,58,'#1d261f',700);
+  var rows=[['나무',w.name+' ('+w.en+')'],['원판 크기',S.w+' × '+S.h+' mm'],['두께',S.t+' mm'],['테마',th.name],['모양',b.geo.name],['원판 사용률',pct(y)],['걸이 구멍',S.hole&&b.geo.holes.length?'있음 (지름 '+Math.round(b.geo.holes[0][2]*2)+'mm)':'없음'],['각인 문구',S.text.trim()?S.text.trim()+' ('+FONT_LABEL[S.font]+')':'없음'],['만든 날',new Date().toLocaleDateString('ko-KR')]];
+  var yy=y0+150;rows.forEach(function(r){s+='<line x1="'+x+'" x2="1940" y1="'+(yy-38)+'" y2="'+(yy-38)+'" stroke="#d3dacb" stroke-width="2"/>'+T(r[0],yy,24,'#5b6a5f')+'<text x="1590" y="'+yy+'" font-size="28" fill="#1d261f" font-weight="700" font-family="'+SANS+'">'+esc(r[1])+'</text>';yy+=66;});
+  yy+=16;s+=T('나무 특징',yy,24,'#5b6a5f');yy+=42;
+  wrapText(w.desc,21).forEach(function(l){s+=T(l,yy,25,'#1d261f');yy+=38;});
+  s+=T('빗금 = 잘려 나가는 자투리 · 실제 원목은 색과 무늬가 조금씩 달라요',1230,19,'#5b6a5f');
   return s+'</svg>';
 }
 function downloadSheet(){
@@ -776,28 +782,28 @@ function downloadSheet(){
   img.src=url;
 }
 function laserSVG(c){
-  var W=c.w,H=c.h;
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'mm" height="'+H+'mm" viewBox="0 0 '+W+' '+H+'"><title>도마 레이저 각인 도면 '+W+'x'+H+'mm (빨강=재단, 검정=각인)</title>'+
-   '<g id="cut" fill="none" stroke="#ff0000" stroke-width="0.1"><path d="'+shapePath(c.shape,W,H)+'" fill-rule="evenodd"/></g>'+
-   '<g id="engrave">'+engraving(c,'#000000')+'</g></svg>';
+  var geo=buildShape(c),W=geo.W,H=geo.H,tx=engraving(c,geo,'#000000');
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'mm" height="'+H+'mm" viewBox="0 0 '+W+' '+H+'"><title>석이의 도마세상 재단 도면 - '+esc(geo.name)+' '+W+'x'+H+'mm (빨강=자르는 선, 검정=각인)</title>'+
+   '<rect id="stock" x="0" y="0" width="'+W+'" height="'+H+'" fill="none" stroke="#0000ff" stroke-width="0.1" stroke-dasharray="2 2"/>'+
+   '<g id="cut" fill="none" stroke="#ff0000" stroke-width="0.1"><path d="'+geo.d+'"/></g>'+(tx?'<g id="engrave">'+tx+'</g>':'')+'</svg>';
 }
-function saveState(){try{localStorage.setItem('domae-state',JSON.stringify({w:S.w,h:S.h,t:S.t,shape:S.shape,wood:S.wood,theme:S.theme,font:S.font,scale:S.scale,border:S.border}));}catch(e){}}
-function loadState(){try{var o=JSON.parse(localStorage.getItem('domae-state')||'null');if(o&&WOOD[o.wood]&&motifsOf(o.theme).length)Object.assign(S,o);}catch(e){}}
+function saveState(){try{localStorage.setItem('dosesang-state',JSON.stringify({w:S.w,h:S.h,t:S.t,wood:S.wood,theme:S.theme,shape:S.shape,font:S.font,hole:S.hole}));}catch(e){}}
+function loadState(){try{var o=JSON.parse(localStorage.getItem('dosesang-state')||'null');if(o&&WOOD[o.wood]&&shapesOf(o.theme).length){Object.assign(S,o);if(!SHAPES[S.shape]||SHAPES[S.shape].th!==S.theme)S.shape=shapesOf(S.theme)[0];}}catch(e){}}
 
-/* ---------- 메인 예시 ---------- */
-var heroI=0,HERO=[{wood:'walnut',theme:'trend',shape:'handle',motif:'botanical'},{wood:'maple',theme:'animal',shape:'round',motif:'cat'},{wood:'acacia',theme:'shape',shape:'rect',motif:'bauhaus'},{wood:'olive',theme:'people',shape:'oval',motif:'family'},{wood:'zelkova',theme:'animal',shape:'handle',motif:'whale'},{wood:'hinoki',theme:'trend',shape:'round',motif:'citrus'}];
+/* ---------- 메인 예시: 레이저가 재단선을 따라 그려지는 모습 ---------- */
+var heroI=0,HERO=[{wood:'zelkova',shape:'whale',w:420,h:210},{wood:'maple',shape:'pig',w:400,h:250},{wood:'walnut',shape:'paddle',w:440,h:240},{wood:'hinoki',shape:'fish',w:420,h:220},{wood:'acacia',shape:'heart',w:300,h:270},{wood:'olive',shape:'liveedge',w:440,h:220},{wood:'camphor',shape:'bear',w:300,h:280},{wood:'ginkgo',shape:'apple',w:280,h:280},{wood:'teak',shape:'leaf',w:440,h:220}];
 function hero(){
   var h=HERO[heroI%HERO.length];heroI++;
-  var c={w:400,h:260,t:28,shape:h.shape,wood:h.wood,text:'',font:'serif',scale:.62,border:h.shape==='rect',gseed:heroI*13,motif:h.motif,mseed:heroI*977};
-  var box=$('heroBoard');box.innerHTML=boardSVG(c,{uid:'hero'+heroI});
+  var c={w:h.w,h:h.h,t:28,wood:h.wood,text:'',font:'serif',hole:true,gseed:heroI*13,shape:h.shape,sseed:heroI*977,flip:false};
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!reduce){box.querySelectorAll('.eng *').forEach(function(el){el.setAttribute('pathLength','1');});box.classList.remove('drawing');void box.offsetWidth;box.classList.add('drawing');}
-  $('heroTag').textContent=WOOD[h.wood].name+' · '+THEMES.filter(function(t){return t.id===h.theme;})[0].name+' · '+MOTIFS[h.motif].name;
+  var box=$('heroBoard');box.innerHTML=boardSVG(c,{uid:'hero'+heroI,cutline:!reduce});
+  if(!reduce){box.classList.remove('drawing');void box.offsetWidth;box.classList.add('drawing');}
+  $('heroTag').textContent=WOOD[h.wood].name+' · '+SHAPES[h.shape].name+' 도마';
 }
 
-loadState();newVariants();buildControls();
-$('inText').value=S.text;$('inFont').value=S.font;$('inScale').value=Math.round(S.scale*100);$('inBorder').checked=S.border;
-update();hero();setInterval(hero,4500);getDL();
+loadState();buildControls();
+$('inText').value=S.text;$('inFont').value=S.font;$('inHole').checked=S.hole;
+update();hero();setInterval(hero,4800);getDL();
 })();
 </script>
 
