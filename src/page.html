@@ -355,7 +355,9 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
         <label class="check"><input type="checkbox" id="inHole"> 걸이 구멍 뚫기</label>
         <div class="opts">
           <div class="field"><label for="inText">새길 문구 · 이름</label><div class="inp"><input id="inText" type="text" maxlength="20" placeholder="예: 우리집 부엌, Kim's Kitchen" style="font-family:var(--f-body)"></div></div>
-          <div class="field"><label for="inTpos">문구 위치</label><select id="inTpos"><option value="center">가운데</option><option value="top">위</option><option value="bottom">아래</option><option value="left">왼쪽</option><option value="right">오른쪽</option></select></div>
+          <div class="field"><label for="inTv">문구 위치 ① 위·아래</label><select id="inTv"><option value="middle">가운데</option><option value="top">위</option><option value="bottom">아래</option></select></div>
+          <div class="field"><label for="inTh">문구 위치 ② 좌·우</label><select id="inTh"><option value="center">가운데</option><option value="left">왼쪽</option><option value="right">오른쪽</option></select></div>
+          <div class="field"><label for="inTsize">글자 크기 <span class="mono" id="tsizeVal"></span></label><div class="row"><span class="note">작게</span><input id="inTsize" type="range" min="40" max="160" step="10"><span class="note">크게</span></div></div>
           <div class="field"><label for="inFont">글씨체</label><select id="inFont"><option value="serif">명조 (단정한)</option><option value="sans">고딕 (깔끔한)</option><option value="hand">손글씨 (귀여운)</option></select></div>
         </div>
       </section>
@@ -846,8 +848,10 @@ function grainSVG(w,W,H,r){
 function textEm(t){var e=0;for(var i=0;i<t.length;i++)e+=t.charCodeAt(i)>0x2e80?1:.6;return e;}
 function engraving(c,geo,color){
   var txt=(c.text||'').trim();if(!txt)return '';
-  var s=geo.safe,sw=s[2]-s[0],sh=s[3]-s[1],pos=c.tpos||'center',side=pos==='left'||pos==='right',em=Math.max(2.5,textEm(txt)),fs=Math.min(sh*(side?.22:.26),sw*(side?.5:.86)/em);
-  var x=pos==='left'?s[0]:pos==='right'?s[2]:(s[0]+s[2])/2,y=pos==='top'?s[1]+fs*.95:pos==='bottom'?s[3]-fs*.25:(s[1]+s[3])/2+fs*.35,anc=pos==='left'?'start':pos==='right'?'end':'middle';
+  var s=geo.safe,sw=s[2]-s[0],sh=s[3]-s[1],tv=c.tv||'middle',th=c.th||'center',side=th!=='center',em=Math.max(2.5,textEm(txt)),
+    fs=Math.min(sh*.26,sw*(side?.6:.86)/em)*(c.tsize||1);
+  fs=Math.min(fs,sh*.7,sw*.98/textEm(txt||'가'));
+  var x=th==='left'?s[0]:th==='right'?s[2]:(s[0]+s[2])/2,y=tv==='top'?s[1]+fs*.95:tv==='bottom'?s[3]-fs*.25:(s[1]+s[3])/2+fs*.35,anc=th==='left'?'start':th==='right'?'end':'middle';
   return '<text x="'+n(x)+'" y="'+n(y)+'" text-anchor="'+anc+'" font-size="'+n(fs)+'" font-family="'+FONTS[c.font].replace(/"/g,'')+'" font-weight="700" fill="'+color+'">'+esc(txt)+'</text>';
 }
 
@@ -890,8 +894,8 @@ function boardSVG(c,opt){var b=renderBoard(c,opt);var px=opt&&opt.px;return '<sv
 
 var OIL_TIP={zelkova:"느티나무는 결이 촘촘해 오일이 천천히 스며요. 얇게 여러 번 바르면 무늬가 선명해져요.",pine:"송판은 무르고 오일을 많이 먹어요. 첫날은 2~3번 연달아 발라 주세요. 송진이 배어 나오는 곳은 닦아 내고 발라요.",walnut:"월넛은 오일을 바르면 색이 한층 짙고 깊어져요. 미네랄 오일과 밀랍 마무리가 잘 어울려요.",maple:"메이플은 밝은 색이라 텅오일·아마인유는 노랗게 변할 수 있어요. 색을 지키려면 미네랄 오일을 쓰세요.",teak:"티크는 원래 오일이 많아 잘 안 먹어요. 얇게 1~2번 바르고 충분히 닦아 내면 돼요.",olive:"올리브는 오일이 많고 촘촘해서 조금만 발라도 돼요. 얇게 바르고 바로 닦아 주세요.",hinoki:"편백은 향이 좋아 향이 강한 오일은 피하세요. 무른 편이라 첫 마감은 3번 이상 해 주세요.",ginkgo:"은행나무는 오일이 고르게 잘 스며요. 기본 순서대로 3~4번이면 충분해요.",camphor:"캄포는 향과 붉은 무늬가 오일을 바르면 더 살아나요. 기본 순서대로 해 주세요.",acacia:"아카시아 집성판은 이음매로 물이 들지 않게 옆면과 끝면을 특히 꼼꼼히 발라 주세요.",cherry:"체리는 오일을 바르면 붉은빛이 깊어져요. 미네랄 오일로 기본 순서대로 해 주세요.",oak:"화이트 오크는 결이 굵어 오일이 잘 스며요. 끝면(단면)을 특히 많이 발라 주세요.",bamboo:"대나무는 표면이 매끄러워 오일을 적게 먹어요. 얇게 자주 발라 이음매가 마르지 않게 해 주세요.",ash:"물푸레나무는 결이 열려 있어 오일을 잘 먹어요. 첫 마감은 3~4번 충분히 해 주세요.",beech:"너도밤나무는 물에 민감하니 첫 마감을 꼼꼼히 하고, 평소에도 자주 오일을 발라 주세요.",birch:"박달나무는 아주 촘촘해서 오일이 천천히 스며요. 얇게 여러 번 발라 주세요.",rubber:"고무나무는 오일을 꽤 먹어요. 첫 마감은 3~4번 충분히 해 주세요. 집성 이음매도 꼼꼼히 발라요."};
 /* ---------- 상태 ---------- */
-var S={w:380,h:250,t:25,wood:'zelkova',theme:'animal',shape:'whale',sseed:5,flip:false,vary:.25,round:.3,fat:0,text:'',tpos:'center',font:'serif',hole:true,gseed:7};
-function cfg(){return {w:S.w,h:S.h,t:S.t,wood:S.wood,text:S.text,tpos:S.tpos,vary:S.vary,round:S.round,fat:S.fat,font:S.font,hole:S.hole,gseed:S.gseed,shape:S.shape,sseed:S.sseed,flip:S.flip};}
+var S={w:380,h:250,t:25,wood:'zelkova',theme:'animal',shape:'whale',sseed:5,flip:false,vary:.25,round:.3,fat:0,text:'',tv:'middle',th:'center',tsize:1,font:'serif',hole:true,gseed:7};
+function cfg(){return {w:S.w,h:S.h,t:S.t,wood:S.wood,text:S.text,tv:S.tv,th:S.th,tsize:S.tsize,vary:S.vary,round:S.round,fat:S.fat,font:S.font,hole:S.hole,gseed:S.gseed,shape:S.shape,sseed:S.sseed,flip:S.flip};}
 function rankShapes(){return shapesOf(S.theme).map(function(k){var g=buildShape({shape:k,w:S.w,h:S.h,sseed:5,hole:S.hole,vary:S.vary,round:S.round,fat:S.fat});return {k:k,g:g,y:yieldOf(g)};}).sort(function(a,b){return (b.y||0)-(a.y||0);});}
 function pct(v){return v==null?'-':Math.round(v*100)+'%';}
 
@@ -920,8 +924,10 @@ function buildControls(){
   num('inW','w',150,800);num('inH','h',100,600);num('inT','t',10,60);
   var tmr;$('inText').addEventListener('input',function(){S.text=this.value;clearTimeout(tmr);tmr=setTimeout(update,150);});
   $('inFont').addEventListener('change',function(){S.font=this.value;update();});
-  $('inTpos').addEventListener('change',function(){S.tpos=this.value;update();});
-  var tm2;var slide=function(id,key){$(id).addEventListener('input',function(){S[key]=this.value/100;clearTimeout(tm2);tm2=setTimeout(update,60);});};
+  $('inTv').addEventListener('change',function(){S.tv=this.value;update();});
+  $('inTh').addEventListener('change',function(){S.th=this.value;update();});
+  $('inTsize').addEventListener('input',function(){S.tsize=+this.value/100;$('tsizeVal').textContent=this.value+'%';clearTimeout(tm3);tm3=setTimeout(update,60);});
+  var tm2,tm3;var slide=function(id,key){$(id).addEventListener('input',function(){S[key]=this.value/100;clearTimeout(tm2);tm2=setTimeout(update,60);});};
   slide('inVary','vary');slide('inRound','round');
   $('inFat').addEventListener('input',function(){var v=+this.value;S.fat=v<0?v/50*.4:v/50*.45;clearTimeout(tm2);tm2=setTimeout(update,60);});
   $('btnReset').addEventListener('click',function(){S.fat=0;S.vary=.25;S.round=.3;$('inFat').value=0;$('inVary').value=25;$('inRound').value=30;update();});
@@ -1026,8 +1032,8 @@ function laserSVG(c){
    '<rect id="stock" x="0" y="0" width="'+W+'" height="'+H+'" fill="none" stroke="#0000ff" stroke-width="0.1" stroke-dasharray="2 2"/>'+
    '<g id="cut" fill="none" stroke="#ff0000" stroke-width="0.1"><path d="'+geo.d+'"/></g>'+(tx?'<g id="engrave">'+tx+'</g>':'')+'</svg>';
 }
-function saveState(){try{localStorage.setItem('dosesang-state',JSON.stringify({w:S.w,h:S.h,t:S.t,wood:S.wood,theme:S.theme,shape:S.shape,font:S.font,hole:S.hole,tpos:S.tpos,vary:S.vary,round:S.round,fat:S.fat}));}catch(e){}}
-function loadState(){try{var o=JSON.parse(localStorage.getItem('dosesang-state')||'null');if(o&&WOOD[o.wood]&&shapesOf(o.theme).length){Object.assign(S,o);if(!SHAPES[S.shape]||(S.theme!=='all'&&SHAPES[S.shape].th!==S.theme))S.shape=shapesOf(S.theme)[0];}}catch(e){}}
+function saveState(){try{localStorage.setItem('dosesang-state',JSON.stringify({w:S.w,h:S.h,t:S.t,wood:S.wood,theme:S.theme,shape:S.shape,font:S.font,hole:S.hole,tv:S.tv,th:S.th,tsize:S.tsize,vary:S.vary,round:S.round,fat:S.fat}));}catch(e){}}
+function loadState(){try{var o=JSON.parse(localStorage.getItem('dosesang-state')||'null');if(o&&WOOD[o.wood]&&shapesOf(o.theme).length){if(o.tpos&&!o.tv){o.tv=o.tpos==='top'?'top':o.tpos==='bottom'?'bottom':'middle';o.th=o.tpos==='left'?'left':o.tpos==='right'?'right':'center';}delete o.tpos;Object.assign(S,o);if(!(S.tsize>=.4&&S.tsize<=1.6))S.tsize=1;if(!SHAPES[S.shape]||(S.theme!=='all'&&SHAPES[S.shape].th!==S.theme))S.shape=shapesOf(S.theme)[0];}}catch(e){}}
 
 /* ---------- 메인 예시: 레이저가 재단선을 따라 그려지는 모습 ---------- */
 var heroI=0,HERO=[{wood:'zelkova',shape:'whale',w:420,h:210},{wood:'maple',shape:'pig',w:400,h:250},{wood:'walnut',shape:'paddle',w:440,h:240},{wood:'hinoki',shape:'fish',w:420,h:220},{wood:'acacia',shape:'heart',w:300,h:270},{wood:'olive',shape:'liveedge',w:440,h:220},{wood:'camphor',shape:'bear',w:300,h:280},{wood:'ginkgo',shape:'apple',w:280,h:280},{wood:'teak',shape:'leaf',w:440,h:220},{wood:'walnut',shape:'wine',w:460,h:180},{wood:'maple',shape:'cow',w:420,h:280}];
@@ -1041,7 +1047,7 @@ function hero(){
 }
 
 loadState();buildControls();
-$('inText').value=S.text;$('inFont').value=S.font;$('inTpos').value=S.tpos;$('inVary').value=Math.round(S.vary*100);$('inRound').value=Math.round(S.round*100);$('inFat').value=Math.round(S.fat<0?S.fat/.4*50:S.fat/.45*50);$('inHole').checked=S.hole;
+$('inText').value=S.text;$('inFont').value=S.font;$('inTv').value=S.tv;$('inTh').value=S.th;$('inTsize').value=Math.round(S.tsize*100);$('tsizeVal').textContent=Math.round(S.tsize*100)+'%';$('inVary').value=Math.round(S.vary*100);$('inRound').value=Math.round(S.round*100);$('inFat').value=Math.round(S.fat<0?S.fat/.4*50:S.fat/.45*50);$('inHole').checked=S.hole;
 update();hero();setInterval(hero,4800);getDL();
 })();
 </script>
