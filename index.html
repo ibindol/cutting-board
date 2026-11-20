@@ -60,6 +60,11 @@ button,input,select{font:inherit;color:inherit}
 .top nav{display:flex;gap:6px;flex-wrap:wrap}
 .top nav a{text-decoration:none;font-size:14px;padding:6px 12px;border-radius:999px;color:var(--muted)}
 .top nav a:hover{background:var(--chip);color:var(--ink)}
+.game-link{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:14px;color:var(--ink);border:1.5px solid var(--line, #d9cfbf);border-radius:999px;padding:6px 13px 6px 10px;background:var(--surface, #fff);margin-left:auto}
+.game-link:hover{background:var(--chip);border-color:var(--accent)}
+.game-link svg{color:var(--accent)}
+.top nav{margin-left:auto}
+.top nav + .game-link{margin-left:0}
 
 /* hero */
 .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center;padding-block:24px 48px}
@@ -230,6 +235,10 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
   .dims{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wood-detail,.opts{grid-template-columns:1fr}
   .top nav{display:none}
+  .top{flex-wrap:nowrap}
+  .logo span{display:none}
+  .game-link{padding:7px 10px}
+  .game-link span{display:none}
 }
 .themes{grid-template-columns:repeat(4,minmax(0,1fr))}
 .theme svg{height:46px}
@@ -293,6 +302,10 @@ footer .wrap{padding-block:20px;font-size:13px;color:var(--muted);display:flex;j
       <a href="#guide">다운로드 안내</a>
       <a href="#oil">오일 마감</a>
     </nav>
+    <a class="game-link" href="game.html" title="쉬어 가기: 거품 공룡 게임" aria-label="미니 게임 거품 공룡 하러 가기">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 8h11a4 4 0 0 1 3.9 4.9l-1 4.4a2.3 2.3 0 0 1-4 1L14.6 16H9.4l-1.8 2.3a2.3 2.3 0 0 1-4-1l-1-4.4A4 4 0 0 1 6.5 8z"/><path d="M7.5 11v3M6 12.5h3"/><circle cx="16" cy="11.6" r=".9" fill="currentColor" stroke="none"/><circle cx="17.8" cy="13.6" r=".9" fill="currentColor" stroke="none"/></svg>
+      <span>게임</span>
+    </a>
   </header>
 
   <section class="hero" id="top">
